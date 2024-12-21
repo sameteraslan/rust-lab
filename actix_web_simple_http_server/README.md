@@ -20,7 +20,7 @@ This project demonstrates a simple HTTP server using the [Actix Web](https://act
 ```
 .
 ├── src
-│   └── lib.rs        # Main application logic
+│   └── main.rs        # Main application logic
 ├── html
 │   └── index.html     # Static HTML file served at the root route
 └── tests
