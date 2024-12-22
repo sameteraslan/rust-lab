@@ -1,0 +1,7 @@
+{
+    "game_speed" : 1,
+    "dynamic_game_speed" : true,
+    "screen_width" : 50,
+    "screen_height" : 10,
+    "score_width": 20
+}
