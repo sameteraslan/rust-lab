@@ -32,9 +32,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-cargo-
 
-    - name: Install dependencies
-      run: cargo fetch
-
     - name: Build each project
       run: |
         for dir in $(find . -type f -name "Cargo.toml" -exec dirname {} \;); do
