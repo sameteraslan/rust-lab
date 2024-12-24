@@ -26,7 +26,7 @@ To build and run this project, ensure you have:
 
    ```bash
    git clone https://github.com/sameteraslan/rust-lab.git
-   cd rust-lab/binance-analyze
+   cd rust-lab/binance_analyze
    ```
 
 2. Build the project:

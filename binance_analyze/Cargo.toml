@@ -1,5 +1,5 @@
 [package]
-name = "binance-analyze"
+name = "binance_analyze"
 version = "0.1.0"
 edition = "2021"
 
