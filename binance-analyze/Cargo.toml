@@ -1,0 +1,10 @@
+[package]
+name = "binance-analyze"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reqwest = "0.12.9"
+serde_json = "1.0.134"
+tokio = { version = "1.42.0", features = ["full"] }
+rtplot = "0.2.0"
