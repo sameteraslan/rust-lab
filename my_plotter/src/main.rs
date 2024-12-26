@@ -1,4 +1,6 @@
-use my_plotter::{LineStyle, Plot}; // Import the custom Plot library and LineStyle
+use my_plotter::plot::bar_chart_plot::BarChartMethods;
+use my_plotter::plot::cartesian_graph_plot::CartesianGraphMethods;
+use my_plotter::{drawings, LineStyle, Plot, PlotType, Winop};
 use std::f64::consts::PI;
 use std::thread;
 
@@ -21,9 +23,9 @@ fn main() {
         })
         .collect();
 
-        let handle1 = thread::spawn(|| {
+    let handle1 = thread::spawn(|| {
         // Create the plot
-        let mut plot = Plot::new()
+        let mut plot = Plot::new(PlotType::CartesianGraph)
             .width(800)
             .height(600)
             .x_max(PI)
@@ -32,49 +34,51 @@ fn main() {
             .line_thickness(1)
             .title("Sine and Cosine")
             .xlabel("x")
-            .ylabel("f(x)")
-            .add_dataset(sin_data, [255, 0, 0], "sin(x)", LineStyle::Dashed) // Red for sin(x)
-            .add_dataset(cos_data, [0, 0, 255], "cos(x)", LineStyle::DashDot) // Blue for cos(x)
-            .add_dataset(
-                vec![
-                    (-1.0, 0.0),
-                    (0.0, 1.0),
-                    (1.0, 0.0),
-                    (0.0, -1.0),
-                    (-1.0, 0.0),
-                ],
-                [0, 255, 0],
-                "diamond",
-                LineStyle::Dotted,
-            ) // Green line
-            .add_dataset(
-                vec![
-                    (-1.6, 0.0),
-                    (0.0, 1.0),
-                    (1.6, 0.0),
-                    (0.0, -1.0),
-                    (-1.6, 0.0),
-                ],
-                [50, 50, 50],
-                "diamond 2",
-                LineStyle::Dotted,
-            ); // custom line
+            .ylabel("f(x)");
+        plot.add_dataset(sin_data, [255, 0, 0], "sin(x)", LineStyle::Dashed); // Red for sin(x)
+        plot.add_dataset(cos_data, [0, 0, 255], "cos(x)", LineStyle::DashDot); // Blue for cos(x)
+        plot.add_dataset(
+            vec![
+                (-1.0, 0.0),
+                (0.0, 1.0),
+                (1.0, 0.0),
+                (0.0, -1.0),
+                (-1.0, 0.0),
+            ],
+            [0, 255, 0],
+            "diamond",
+            LineStyle::Dotted,
+        ); // Green line
+        plot.add_dataset(
+            vec![
+                (-1.6, 0.0),
+                (0.0, 1.0),
+                (1.6, 0.0),
+                (0.0, -1.0),
+                (-1.6, 0.0),
+            ],
+            [50, 50, 50],
+            "diamond 2",
+            LineStyle::Dotted,
+        ); // custom line
 
         // Save the plot with grid and labels to a file
-        plot.save_with_grid("sin_wave_with_grid.png");
-        plot.save("sin_wave.png");
+        drawings::Drawing::save(&mut plot, "sin_wave.png");
 
-        plot.display();
+        Winop::display(&mut plot);
     });
 
     let handle2 = thread::spawn(|| {
-        let mut plot = Plot::new()
-            .width(800)
+        let mut plot = Plot::new(PlotType::CartesianGraph)
+            .width(600)
             .height(600)
+            .x_max(60.0)
+            .y_max(1.0)
             .title("Real-Time Graph")
             .xlabel("Time")
-            .ylabel("Value")
-            .add_dataset(vec![], [255, 0, 0], "Data", LineStyle::Solid);
+            .ylabel("Value");
+
+        plot.add_dataset(vec![], [255, 0, 0], "Data", LineStyle::Solid);
 
         // Simulate real-time data
         let mut t: f64 = 0.0;
@@ -83,9 +87,25 @@ fn main() {
             (t, (t * 2.0).sin()) // Generate sine wave data
         };
 
-        plot.display_real_time(data_generator);
+        Winop::display_real_time(&mut plot, data_generator, 60);
+    });
+
+    let handle3 = thread::spawn(|| {
+        let mut plot = Plot::new(PlotType::BarChart)
+            .title("Bar Chart Graph Example")
+            .xlabel("x")
+            .ylabel("y")
+            .x_max(5.0)
+            .y_max(5.0)
+            .margin(100)
+            .line_thickness(1);
+
+        plot.add_bar_dataset(vec![(1.0, 2.0), (2.6, 1.0)], [255, 0, 0], "Line");
+
+        Winop::display(&mut plot);
     });
 
     handle1.join().unwrap();
     handle2.join().unwrap();
+    handle3.join().unwrap();
 }
