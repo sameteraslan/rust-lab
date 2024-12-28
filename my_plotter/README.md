@@ -19,6 +19,7 @@ The above code generates a plot and saves it as `plot.png` in the current workin
 ![](./screenshots/pie_chart.png)
 ![](./screenshots/quadrant1_graph.png)
 ![](./screenshots/scatter_graph.png)
+![](./screenshots/area_chart.png)
 
 ## Customization Options
 - **Title**: Set the title of the plot.

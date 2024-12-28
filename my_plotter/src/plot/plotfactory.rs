@@ -4,6 +4,7 @@ use crate::plot::drawer::Drawer;
 
 use crate::plot::piechart::PieChart;
 
+use super::areachart::AreaChart;
 use super::scattergraph::ScatterGraph;
 
 pub enum PlotType {
@@ -11,6 +12,7 @@ pub enum PlotType {
     CartesianGraph,
     PieChart,
     ScatterGraph,
+    AreaChart,
 }
 
 pub struct PlotFactory;
@@ -31,6 +33,7 @@ impl PlotFactory {
             PlotType::ScatterGraph => {
                 Box::new(ScatterGraph::new("Scatter Graph", "X Axis", "Y Axis"))
             }
+            PlotType::AreaChart => Box::new(AreaChart::new("Area Chart", "X Axis", "Y Axis")),
         }
     }
 }

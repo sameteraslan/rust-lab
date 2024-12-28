@@ -1,3 +1,5 @@
+pub mod areachart;
+pub mod areachartdataset;
 pub mod barchart;
 pub mod bardataset;
 pub mod canvas;

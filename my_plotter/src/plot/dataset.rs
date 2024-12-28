@@ -1,6 +1,7 @@
 use crate::plot::bardataset::BarDataset;
 use crate::plot::cartesiangraphdataset::CartesianDataset;
 
+use super::areachartdataset::AreaChartDataset;
 use super::scattergraphdataset::ScatterGraphDataset;
 
 pub trait Dataset {
@@ -29,6 +30,16 @@ impl Dataset for CartesianDataset {
 }
 
 impl Dataset for ScatterGraphDataset {
+    fn get_points(&self) -> Vec<(f64, f64)> {
+        self.points.clone()
+    }
+
+    fn add_point(&mut self, point: (f64, f64)) {
+        self.points.push(point);
+    }
+}
+
+impl Dataset for AreaChartDataset {
     fn get_points(&self) -> Vec<(f64, f64)> {
         self.points.clone()
     }

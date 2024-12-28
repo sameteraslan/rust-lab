@@ -1,5 +1,7 @@
 use my_plotter::dataset::Dataset;
 use my_plotter::drawer::Drawer;
+use my_plotter::plot::areachart::AreaChart;
+use my_plotter::plot::areachartdataset::AreaChartDataset;
 use my_plotter::plot::barchart::BarChart;
 use my_plotter::plot::bardataset::BarDataset;
 use my_plotter::plot::canvas::Canvas;
@@ -164,8 +166,7 @@ fn main() {
 
     let mut dataset1 =
         ScatterGraphDataset::new([220, 0, 0], "Dataset 1", ScatterDotType::Circle(2));
-    let mut dataset2 =
-        ScatterGraphDataset::new([0, 220, 0], "Dataset 2", ScatterDotType::Cross(5));
+    let mut dataset2 = ScatterGraphDataset::new([0, 220, 0], "Dataset 2", ScatterDotType::Cross(5));
     let mut dataset3 =
         ScatterGraphDataset::new([0, 0, 220], "Dataset 3", ScatterDotType::Square(5));
     let mut dataset4 =
@@ -202,4 +203,34 @@ fn main() {
 
     scatter_graph.draw(&mut canvas);
     canvas.save_as_image("scatter_graph.png");
+
+    // Area Chart
+
+    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis");
+
+    let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
+    dataset1.add_point((0.0, 0.0));
+    dataset1.add_point((1.0, 2.0));
+    dataset1.add_point((2.0, 1.0));
+    dataset1.add_point((3.0, 3.0));
+
+    let mut dataset2 = AreaChartDataset::new([0, 220, 0], "Dataset 2", 0.5);
+    dataset2.add_point((0.0, 1.0));
+    dataset2.add_point((1.0, 1.5));
+    dataset2.add_point((2.0, 0.5));
+    dataset2.add_point((3.0, 2.0));
+
+    let mut dataset3 = AreaChartDataset::new([0, 0, 220], "Dataset 3", 0.5);
+    dataset3.add_point((0.0, 2.5));
+    dataset3.add_point((1.0, 0.5));
+    dataset3.add_point((2.0, 0.5));
+    dataset3.add_point((3.0, 1.5));
+
+    area_chart.add_dataset(dataset1);
+    area_chart.add_dataset(dataset2);
+    area_chart.add_dataset(dataset3);
+
+    area_chart.draw(&mut canvas);
+    canvas.save_as_image("area_chart.png");
 }

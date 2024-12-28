@@ -36,6 +36,27 @@ impl Canvas {
         }
     }
 
+    pub fn blend_pixel(&mut self, x: u32, y: u32, color: [u8; 3], alpha: f64) {
+        let index = ((y * self.width + x) * 3) as usize;
+        if index + 2 < self.buffer.len() {
+            let existing_color = [
+                self.buffer[index],
+                self.buffer[index + 1],
+                self.buffer[index + 2],
+            ];
+
+            let blended_color = [
+                (color[0] as f64 * alpha + existing_color[0] as f64 * (1.0 - alpha)) as u8,
+                (color[1] as f64 * alpha + existing_color[1] as f64 * (1.0 - alpha)) as u8,
+                (color[2] as f64 * alpha + existing_color[2] as f64 * (1.0 - alpha)) as u8,
+            ];
+
+            self.buffer[index] = blended_color[0];
+            self.buffer[index + 1] = blended_color[1];
+            self.buffer[index + 2] = blended_color[2];
+        }
+    }
+
     pub fn draw_horizontal_line(&mut self, y: u32, color: [u8; 3]) {
         for x in self.margin..self.width - self.margin {
             self.draw_pixel(x, y, color);

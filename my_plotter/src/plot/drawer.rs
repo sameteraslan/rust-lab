@@ -6,8 +6,8 @@ use imageproc::drawing::text_size;
 use std::f64::consts::PI;
 
 use super::{
-    orientation::Orientation, piechart::PieChart, quadrant1graph::Quadrant1Graph,
-    scattergraph::ScatterGraph,
+    areachart::AreaChart, orientation::Orientation, piechart::PieChart,
+    quadrant1graph::Quadrant1Graph, scattergraph::ScatterGraph,
 };
 
 pub trait Drawer {
@@ -659,6 +659,182 @@ impl Drawer for ScatterGraph {
                 }
             }
         }
+
+        // Draw legend
+        self.draw_legend(canvas);
+    }
+
+    fn draw_legend(&self, canvas: &mut Canvas) {
+        let font =
+            FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap(); // Font file
+        let scale = PxScale { x: 10.0, y: 10.0 }; // Font size
+
+        let square_size = 10; // Size of the colored square
+        let padding = 5; // Space between the square and text
+        let line_height = 20; // Vertical space for each legend entry
+        let legend_margin = canvas.margin; // Margin from the bottom of the canvas
+
+        let mut x = canvas.margin;
+        let mut y = canvas.height - legend_margin; // Legend starts from the bottom
+
+        for dataset in &self.datasets {
+            let (w, h) = text_size(scale, &font, &dataset.label);
+            // Draw the square
+            for dy in 0..square_size {
+                for dx in 0..square_size {
+                    canvas.draw_pixel(
+                        x + dx,
+                        y + square_size * 2 + dy + h, // Adjust to align above baseline
+                        dataset.color,
+                    );
+                }
+            }
+
+            // Draw the label text next to the square
+            let text_x: u32 = x + square_size + padding;
+            canvas.draw_text(
+                text_x,
+                y + 2 * square_size + h,
+                &dataset.label,
+                dataset.color,
+                &font,
+                scale,
+            );
+
+            // Move to the next legend entry
+            x += square_size + padding + w + padding;
+            if x > canvas.width - canvas.margin {
+                // If the width exceeds, wrap to the next row
+                x = canvas.margin;
+                y -= line_height;
+            }
+        }
+    }
+}
+
+impl Drawer for AreaChart {
+    fn draw(&self, canvas: &mut Canvas) {
+        canvas.clear();
+        println!("Drawing Area Chart: {}", self.title);
+
+        let font =
+            FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
+        let scale_title = PxScale { x: 20.0, y: 20.0 };
+        let scale_labels = PxScale { x: 15.0, y: 15.0 };
+
+        // Draw the title
+        let (w_title, h_title) = text_size(scale_title, &font, &self.title);
+        let title_x = (canvas.width).saturating_sub(w_title) / 2;
+        let title_y = (canvas.margin / 3).saturating_sub(h_title) as u32;
+        canvas.draw_text(title_x, title_y, &self.title, [0, 0, 0], &font, scale_title);
+
+        // Calculate dataset limits
+        let (x_min, x_max) = self
+            .datasets
+            .iter()
+            .flat_map(|dataset| dataset.points.iter().map(|&(x, _)| x))
+            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), x| {
+                (min.min(x), max.max(x))
+            });
+
+        let (y_min, y_max) = self
+            .datasets
+            .iter()
+            .flat_map(|dataset| dataset.points.iter().map(|&(_, y)| y))
+            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), y| {
+                (min.min(y), max.max(y))
+            });
+
+        // Adjust limits to include (0, 0)
+        let x_min = x_min.min(0.0);
+        let y_min = y_min.min(0.0);
+
+        // Calculate scales
+        let scale_x = (canvas.width - 2 * canvas.margin) as f64 / (x_max - x_min);
+        let scale_y = (canvas.height - 2 * canvas.margin) as f64 / (y_max - y_min);
+
+        // Draw grids
+        canvas.draw_grid(20, [200, 200, 200]);
+
+        // Draw axes
+        // let origin_x = canvas.margin as i32;
+        // let origin_y = canvas.height as i32 - canvas.margin as i32;
+        // Draw axes
+        let origin_x = canvas.margin as i32 + ((0.0 - x_min) * scale_x) as i32;
+        let origin_y =
+            canvas.height as i32 - canvas.margin as i32 - ((0.0 - y_min) * scale_y) as i32;
+
+        let (w, h) = text_size(scale_labels, &font, &self.x_label);
+        // Draw axes labels
+        canvas.draw_text(
+            canvas.width - canvas.margin + w / 2,
+            origin_y as u32 - h / 2,
+            &self.x_label,
+            [0, 0, 0],
+            &font,
+            scale_labels,
+        );
+
+        let (w, h) = text_size(scale_labels, &font, &self.y_label);
+        canvas.draw_text(
+            origin_x as u32 - w / 2,
+            canvas.margin - h - 10,
+            &self.y_label,
+            [0, 0, 0],
+            &font,
+            scale_labels,
+        );
+
+        // Draw axis tick values
+        let num_ticks = 10;
+
+        // X-axis ticks
+        let x_tick_step = (x_max - x_min) / num_ticks as f64;
+        for i in 0..=num_ticks {
+            let value_x = x_min + i as f64 * x_tick_step;
+            let tick_x = origin_x + ((value_x - x_min) * scale_x) as i32;
+
+            let value_label = format!("{:.2}", value_x);
+            let (w, h) = text_size(scale_labels, &font, &value_label);
+
+            canvas.draw_text(
+                (tick_x - w as i32 / 2).max(0) as u32,
+                (origin_y + h as i32).min(canvas.height as i32 - 1) as u32,
+                &value_label,
+                [0, 0, 0],
+                &font,
+                scale_labels,
+            );
+        }
+
+        // Y-axis ticks
+        let y_tick_step = (y_max - y_min) / num_ticks as f64;
+        for i in 0..=num_ticks {
+            let value_y = y_min + i as f64 * y_tick_step;
+            let tick_y = origin_y - ((value_y - y_min) * scale_y) as i32;
+
+            let value_label = format!("{:.2}", value_y);
+            let (w, h) = text_size(scale_labels, &font, &value_label);
+
+            canvas.draw_text(
+                (origin_x - w as i32 - 5).max(0) as u32,
+                (tick_y - h as i32 / 2).max(0) as u32,
+                &value_label,
+                [0, 0, 0],
+                &font,
+                scale_labels,
+            );
+        }
+
+        // Draw areas under the curves
+        for dataset in &self.datasets {
+            self.draw_area(canvas, dataset, origin_x, origin_y, scale_x, scale_y);
+        }
+
+        canvas.draw_vertical_line(canvas.margin, [0, 0, 0]);
+        canvas.draw_vertical_line(canvas.width - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.height - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.margin, [0, 0, 0]);
 
         // Draw legend
         self.draw_legend(canvas);
