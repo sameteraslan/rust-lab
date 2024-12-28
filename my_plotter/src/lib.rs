@@ -1,9 +1,16 @@
 pub mod plot;
 
-pub use plot::bar_chart_plot::BarChartPlot;
-pub use plot::cartesian_graph_plot::CartesianGraphPlot;
-pub use plot::displayable_plot::DisplayablePlot;
-pub use plot::drawings;
-pub use plot::styles::{LineStyle, PlotType};
-pub use plot::winop::Winop;
-pub use plot::Plot;
+pub use crate::plot::barchart;
+pub use crate::plot::bardataset;
+pub use crate::plot::canvas;
+pub use crate::plot::cartesiangraph;
+pub use crate::plot::cartesiangraphdataset;
+pub use crate::plot::dataset;
+pub use crate::plot::drawer;
+pub use crate::plot::linetype;
+// pub use crate::plot::plotbuilder;
+pub use crate::plot::plotfactory;
+pub use crate::plot::quadrant1graph;
+pub use crate::plot::renderstrategy;
+pub use crate::plot::scattergraph;
+pub use crate::plot::scattergraphdataset;

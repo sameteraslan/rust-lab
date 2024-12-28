@@ -1,10 +1,16 @@
-pub mod bar_chart_plot;
-pub mod cartesian_graph_plot;
-pub mod displayable_plot;
-pub mod drawings;
-pub mod plot;
-pub mod styles;
-pub mod winop;
-
-pub use plot::Plot;
-pub use styles::{LineStyle, PlotType};
+pub mod barchart;
+pub mod bardataset;
+pub mod canvas;
+pub mod cartesiangraph;
+pub mod cartesiangraphdataset;
+pub mod dataset;
+pub mod drawer;
+pub mod linetype;
+pub mod orientation;
+pub mod piechart;
+pub mod plotfactory;
+pub mod quadrant1graph;
+pub mod renderstrategy;
+pub mod scatterdottype;
+pub mod scattergraph;
+pub mod scattergraphdataset;
