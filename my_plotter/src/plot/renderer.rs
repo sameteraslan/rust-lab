@@ -27,7 +27,6 @@ impl Renderer for CartesianGraphPlot {
             if let Some(mouse_position) = optional_mouse_position {
                 if let Some(closest_point) = dataset.find_closest_point(&self.base, mouse_position.0, mouse_position.1) {
                     // Highlight the closest point on the plot
-                    println!("Closest point: {:?}", closest_point);
                 }
             }
         }

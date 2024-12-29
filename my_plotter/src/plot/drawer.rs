@@ -74,7 +74,6 @@ impl Drawer for BarChart {
 impl Drawer for CartesianGraph {
     fn draw(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing CartesianGraph: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap(); // Provide the path to your font file
@@ -98,8 +97,8 @@ impl Drawer for CartesianGraph {
         canvas.draw_vertical_line(center_x, [0, 0, 0]);
         canvas.draw_horizontal_line(center_y, [0, 0, 0]);
 
-        let scale_x = (canvas.width - 2 * canvas.margin) as f64 / 10.0;
-        let scale_y = (canvas.height - 2 * canvas.margin) as f64 / 10.0;
+        let scale_x = (canvas.width - 2 * canvas.margin) as f64 / (self.x_max - self.x_min);
+        let scale_y = (canvas.height - 2 * canvas.margin) as f64 / 10.0; // Adjust y-range as needed
 
         for dataset in &self.datasets {
             for window in dataset.points.windows(2) {
@@ -256,7 +255,6 @@ impl Drawer for CartesianGraph {
 impl Drawer for Quadrant1Graph {
     fn draw(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Quadrant 1 Graph: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
@@ -443,7 +441,6 @@ impl Drawer for Quadrant1Graph {
 impl Drawer for PieChart {
     fn draw(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Pie Chart: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
@@ -458,7 +455,6 @@ impl Drawer for PieChart {
         // Calculate total value
         let total: f64 = self.datasets.iter().map(|(_, value, _)| value).sum();
         if total == 0.0 {
-            println!("No data to draw pie chart");
             return;
         }
 
@@ -533,7 +529,6 @@ impl Drawer for PieChart {
 impl Drawer for ScatterGraph {
     fn draw(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Scatter Graph: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
@@ -715,7 +710,6 @@ impl Drawer for ScatterGraph {
 impl Drawer for AreaChart {
     fn draw(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Area Chart: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();

@@ -31,7 +31,6 @@ impl BarChart {
     // Horizontal grouped bar chart logic
     pub fn draw_horizontal(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Bar Chart: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
@@ -162,7 +161,6 @@ impl BarChart {
 
     pub fn draw_vertical(&self, canvas: &mut Canvas) {
         canvas.clear();
-        println!("Drawing Bar Chart: {}", self.title);
 
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();

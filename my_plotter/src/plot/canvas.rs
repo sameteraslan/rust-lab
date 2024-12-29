@@ -126,11 +126,6 @@ impl Canvas {
         );
 
         self.buffer = buffer.into_raw();
-        // Placeholder for text rendering logic.
-        println!(
-            "Drawing text '{}' at ({}, {}) with color {:?}",
-            text, x, y, color
-        );
     }
 
     pub fn draw_line(
@@ -209,6 +204,5 @@ impl Canvas {
         let img: RgbImage = ImageBuffer::from_raw(self.width, self.height, self.buffer.clone())
             .expect("Failed to create image buffer");
         img.save(file_path).expect("Failed to save image");
-        println!("Canvas saved as: {}", file_path);
     }
 }
