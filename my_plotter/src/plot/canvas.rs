@@ -1,7 +1,7 @@
 use crate::plot::linetype::LineType;
 use ab_glyph::{FontRef, PxScale};
 use image::Rgb;
-use imageproc::drawing::draw_text_mut;
+use imageproc::drawing::{draw_text_mut, text_size};
 
 pub struct Canvas {
     pub width: u32,
@@ -75,6 +75,30 @@ impl Canvas {
         }
         for y in (self.margin..=self.height - self.margin).step_by(grid_size as usize) {
             self.draw_horizontal_line(y, color);
+        }
+    }
+
+    pub fn draw_text_vertical(
+        &mut self,
+        x: u32,
+        y: u32,
+        text: &str,
+        color: [u8; 3],
+        font: &ab_glyph::FontRef,
+        scale: ab_glyph::PxScale,
+    ) {
+        let mut current_y = y;
+
+        // Draw each character vertically
+        for ch in text.chars() {
+            let char_as_str = ch.to_string();
+            let (_char_width, char_height) = text_size(scale, font, &char_as_str);
+
+            // Draw the character
+            self.draw_text(x, current_y, &char_as_str, color, font, scale);
+
+            // Move down for the next character
+            current_y += char_height as u32 + 5; // Adjust spacing between characters
         }
     }
 

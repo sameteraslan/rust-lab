@@ -1,5 +1,6 @@
 use my_plotter::dataset::Dataset;
 use my_plotter::drawer::Drawer;
+use my_plotter::historgram::Histogram;
 use my_plotter::plot::areachart::AreaChart;
 use my_plotter::plot::areachartdataset::AreaChartDataset;
 use my_plotter::plot::barchart::BarChart;
@@ -14,6 +15,7 @@ use my_plotter::plot::scatterdottype::ScatterDotType;
 use my_plotter::quadrant1graph::Quadrant1Graph;
 use my_plotter::scattergraph::ScatterGraph;
 use my_plotter::scattergraphdataset::ScatterGraphDataset;
+use my_plotter::winop::Winop;
 use rand::Rng;
 use std::f64::consts::PI;
 
@@ -233,4 +235,30 @@ fn main() {
 
     area_chart.draw(&mut canvas);
     canvas.save_as_image("area_chart.png");
+
+    // Histogram
+
+    // Generate random data
+    let mut rng = rand::thread_rng();
+    let data: Vec<f64> = (0..1000).map(|_| rng.gen_range(-3.0..3.0)).collect();
+
+    // Create a Histogram
+    let mut histogram = Histogram::new(
+        "Histogram Example",
+        "Values",
+        "Frequency",
+        30,
+        [135, 206, 250], // Skyblue
+    );
+    histogram.add_data(data);
+
+    // Draw the Histogram
+    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80); // White background
+
+    histogram.draw(&mut canvas);
+    canvas.save_as_image("histogram.png");
+    println!("Histogram saved as 'histogram.png'");
+
+    // Winop::display_with_window(&mut canvas, "Histogram Example");
+    Winop::display_interactive(&mut canvas, &histogram, "Interactive Histogram");
 }

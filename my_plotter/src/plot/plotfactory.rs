@@ -5,6 +5,7 @@ use crate::plot::drawer::Drawer;
 use crate::plot::piechart::PieChart;
 
 use super::areachart::AreaChart;
+use super::historgram::Histogram;
 use super::scattergraph::ScatterGraph;
 
 pub enum PlotType {
@@ -13,6 +14,7 @@ pub enum PlotType {
     PieChart,
     ScatterGraph,
     AreaChart,
+    Histogram,
 }
 
 pub struct PlotFactory;
@@ -34,6 +36,13 @@ impl PlotFactory {
                 Box::new(ScatterGraph::new("Scatter Graph", "X Axis", "Y Axis"))
             }
             PlotType::AreaChart => Box::new(AreaChart::new("Area Chart", "X Axis", "Y Axis")),
+            PlotType::Histogram => Box::new(Histogram::new(
+                "Histogram",
+                "Bins",
+                "Frequency",
+                0,
+                [0, 0, 255],
+            )),
         }
     }
 }
