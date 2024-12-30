@@ -11,12 +11,12 @@ use super::{
 };
 
 pub trait Drawer {
-    fn draw(&self, canvas: &mut Canvas);
+    fn draw(&mut self, canvas: &mut Canvas);
     fn draw_legend(&self, canvas: &mut Canvas);
 }
 
 impl Drawer for BarChart {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         match self.orientation {
             Orientation::Vertical => self.draw_vertical(canvas),
             Orientation::Horizontal => self.draw_horizontal(canvas),
@@ -72,7 +72,7 @@ impl Drawer for BarChart {
 }
 
 impl Drawer for CartesianGraph {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
         let font =
@@ -91,6 +91,16 @@ impl Drawer for CartesianGraph {
         );
         canvas.draw_grid(20, [200, 200, 200]);
 
+        // Ensure x_min and x_max are symmetric
+        let abs_x_min = self.x_min.abs();
+        let abs_x_max = self.x_max.abs();
+
+        if abs_x_min > abs_x_max {
+            self.x_max = abs_x_min;
+        } else {
+            self.x_min = -abs_x_max;
+        }
+
         // Draw X and Y axes
         let center_x = canvas.width / 2;
         let center_y = canvas.height / 2;
@@ -98,7 +108,7 @@ impl Drawer for CartesianGraph {
         canvas.draw_horizontal_line(center_y, [0, 0, 0]);
 
         let scale_x = (canvas.width - 2 * canvas.margin) as f64 / (self.x_max - self.x_min);
-        let scale_y = (canvas.height - 2 * canvas.margin) as f64 / 10.0; // Adjust y-range as needed
+        let scale_y = (canvas.height - 2 * canvas.margin) as f64 / (self.y_max - self.y_min); // Adjust y-range as needed
 
         for dataset in &self.datasets {
             for window in dataset.points.windows(2) {
@@ -158,27 +168,27 @@ impl Drawer for CartesianGraph {
         let x_tick_step = (canvas.width - 2 * canvas.margin) / num_ticks;
         let y_tick_step = (canvas.height - 2 * canvas.margin) / num_ticks;
         // Calculate the min and max for X and Y from datasets
-        let (x_min, x_max) = self
-            .datasets
-            .iter()
-            .flat_map(|d| d.points.iter().map(|p| p.0))
-            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), x| {
-                (min.min(x), max.max(x))
-            });
-        let (y_min, y_max) = self
-            .datasets
-            .iter()
-            .flat_map(|d| d.points.iter().map(|p| p.1))
-            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), y| {
-                (min.min(y), max.max(y))
-            });
+        // let (x_min, x_max) = self
+        //     .datasets
+        //     .iter()
+        //     .flat_map(|d| d.points.iter().map(|p| p.0))
+        //     .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), x| {
+        //         (min.min(x), max.max(x))
+        //     });
+        // let (y_min, y_max) = self
+        //     .datasets
+        //     .iter()
+        //     .flat_map(|d| d.points.iter().map(|p| p.1))
+        //     .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), y| {
+        //         (min.min(y), max.max(y))
+        //     });
 
-        let (w, h) = text_size(scale, &font, format!("{:+.2}", x_min).as_str());
+        let (w, h) = text_size(scale, &font, format!("{:+.2}", self.x_min).as_str());
 
         for i in 0..=num_ticks {
             // X-axis ticks
             let x = canvas.margin + i * x_tick_step - w / 2;
-            let value_x = x_min + ((x_max - x_min) / num_ticks as f64) * i as f64;
+            let value_x = self.x_min + ((self.x_max - self.x_min) / num_ticks as f64) * i as f64;
             let label_x = format!("{:+.2}", value_x);
             canvas.draw_text(
                 x,
@@ -191,7 +201,7 @@ impl Drawer for CartesianGraph {
 
             // Y-axis ticks
             let y = canvas.margin + i * y_tick_step;
-            let value_y = y_min + ((y_max - y_min) / num_ticks as f64) * i as f64;
+            let value_y = self.y_min + ((self.y_max - self.y_min) / num_ticks as f64) * i as f64;
             let label_y = format!("{:.2}", value_y);
             canvas.draw_text(
                 canvas.margin - w - 5,
@@ -253,7 +263,7 @@ impl Drawer for CartesianGraph {
 }
 
 impl Drawer for Quadrant1Graph {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
         let font =
@@ -439,7 +449,7 @@ impl Drawer for Quadrant1Graph {
 }
 
 impl Drawer for PieChart {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
         let font =
@@ -527,7 +537,7 @@ impl Drawer for PieChart {
 }
 
 impl Drawer for ScatterGraph {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
         let font =
@@ -708,7 +718,7 @@ impl Drawer for ScatterGraph {
 }
 
 impl Drawer for AreaChart {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
         let font =
@@ -883,7 +893,7 @@ impl Drawer for AreaChart {
 }
 
 impl Drawer for Histogram {
-    fn draw(&self, canvas: &mut Canvas) {
+    fn draw(&mut self, canvas: &mut Canvas) {
         let bin_data = self.calculate_bins();
         let font =
             FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();

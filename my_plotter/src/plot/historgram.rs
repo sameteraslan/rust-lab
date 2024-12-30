@@ -4,7 +4,11 @@ pub struct Histogram {
     pub y_label: String,
     pub bins: usize,
     pub data: Vec<f64>,
-    pub color: [u8; 3], // RGB color
+    pub color: [u8; 3],       // RGB color
+    pub min: f64,             // Cached minimum value
+    pub max: f64,             // Cached maximum value
+    pub bin_counts: Vec<f64>, // Cached bin frequencies
+    pub bin_width: f64,       // Cached bin width
 }
 
 impl Histogram {
@@ -16,29 +20,45 @@ impl Histogram {
             bins,
             data: Vec::new(),
             color,
+            min: f64::INFINITY,
+            max: f64::NEG_INFINITY,
+            bin_counts: vec![0.0; bins],
+            bin_width: 0.0,
         }
     }
 
-    pub fn add_data(&mut self, values: Vec<f64>) {
-        self.data.extend(values);
+    pub fn add_data_vec(&mut self, values: Vec<f64>) {
+        for value in values {
+            self.add_data(value);
+        }
+    }
+
+    pub fn add_data(&mut self, value: f64) {
+        self.data.push(value);
+
+        // Update min and max
+        if value < self.min {
+            self.min = value;
+        }
+        if value > self.max {
+            self.max = value;
+        }
+
+        // Recalculate bin width and update bin counts
+        self.bin_width = (self.max - self.min) / self.bins as f64;
+        if self.bin_width > 0.0 {
+            let bin_index = ((value - self.min) / self.bin_width).floor() as usize;
+            if bin_index < self.bins {
+                self.bin_counts[bin_index] += 1.0;
+            }
+        }
     }
 
     pub fn calculate_bins(&self) -> Vec<(f64, f64)> {
-        let min = self.data.iter().cloned().fold(f64::INFINITY, f64::min);
-        let max = self.data.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
-        let bin_width = (max - min) / self.bins as f64;
-
-        let mut bins = vec![0.0; self.bins];
-        for &value in &self.data {
-            let bin_index = ((value - min) / bin_width).floor() as usize;
-            if bin_index < self.bins {
-                bins[bin_index] += 1.0;
-            }
-        }
-
-        bins.into_iter()
+        self.bin_counts
+            .iter()
             .enumerate()
-            .map(|(i, freq)| (min + i as f64 * bin_width, freq))
+            .map(|(i, &freq)| (self.min + i as f64 * self.bin_width, freq))
             .collect()
     }
 }

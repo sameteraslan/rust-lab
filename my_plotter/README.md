@@ -21,6 +21,7 @@ The above code generates a plot and saves it as `plot.png` in the current workin
 ![](./screenshots/scatter_graph.png)
 ![](./screenshots/area_chart.png)
 ![](./screenshots/histogram.png)
+![](./screenshots/real_time.gif)
 
 ## Customization Options
 - **Title**: Set the title of the plot.

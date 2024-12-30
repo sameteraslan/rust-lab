@@ -18,7 +18,7 @@ use my_plotter::scattergraphdataset::ScatterGraphDataset;
 use my_plotter::winop::Winop;
 use rand::Rng;
 use std::f64::consts::PI;
-use std::time::Instant;
+use std::thread;
 
 fn main() {
     // Initialize the canvas
@@ -251,7 +251,7 @@ fn main() {
         30,
         [135, 206, 250], // Skyblue
     );
-    histogram.add_data(data);
+    histogram.add_data_vec(data);
 
     // Draw the Histogram
     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80); // White background
@@ -293,51 +293,54 @@ fn main() {
     bar_chart.draw(&mut canvas);
     canvas.save_as_image("grouped_vertical_bar_chart.png");
 
-    // let mut start_time = Instant::now();
-
-    // Closure to update data
-    let update_data = move |chart: &mut BarChart| {
-        for i in 0..chart.datasets.len() {
-            for point in chart.datasets[i].data.iter_mut() {
-                point.1 += rng.gen_range(-20.0..30.0); // Increment y-value
+    let handle1 = thread::spawn(move || {
+        let mut rng = rand::thread_rng();
+        // Closure to update data
+        let update_data = move |chart: &mut BarChart| {
+            for i in 0..chart.datasets.len() {
+                for point in chart.datasets[i].data.iter_mut() {
+                    point.1 += rng.gen_range(-20.0..30.0); // Increment y-value
+                }
             }
-        }
-    };
+        };
 
-    // Display the bar chart in real-time
-    Winop::display_real_time(
-        &mut canvas,
-        &mut bar_chart,
-        "Real-Time Bar Chart",
-        update_data,
-        60,
-    );
+        // Display the bar chart in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut bar_chart,
+            "Real-Time Bar Chart",
+            update_data,
+            30,
+        );
+    });
 
     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
     let mut cartesian_graph = CartesianGraph::new("Real-Time Cartesian Graph", "X", "Y");
 
     let sine_wave = CartesianDataset::new([0, 0, 255], "sin(x)", LineType::Solid);
     cartesian_graph.add_dataset(sine_wave);
-    let mut x_value: f64 = 0.0;
 
-    // Closure to update sine wave data
-    let update_data = move |graph: &mut CartesianGraph| {
-        for i in 0..graph.datasets.len() {
-            let y: f64 = x_value.sin();
-            graph.datasets[i].add_point((x_value, y));
-        }
-        x_value += 0.1;
-        graph.update_range();
-    };
+    let handle2 = thread::spawn(move || {
+        // Closure to update sine wave data
+        let mut x_value: f64 = 0.0;
+        let update_data = move |graph: &mut CartesianGraph| {
+            for i in 0..graph.datasets.len() {
+                let y: f64 = x_value.sin();
+                graph.datasets[i].add_point((x_value, y));
+            }
+            x_value += 0.1;
+            graph.update_range();
+        };
 
-    // Display the Cartesian graph in real-time
-    Winop::display_real_time(
-        &mut canvas,
-        &mut cartesian_graph,
-        "Real-Time Cartesian Graph",
-        update_data,
-        60,
-    );
+        // Display the Cartesian graph in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut cartesian_graph,
+            "Real-Time Cartesian Graph",
+            update_data,
+            60,
+        );
+    });
 
     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
     let mut pie_chart = PieChart::new("Real-Time Market Share");
@@ -346,48 +349,147 @@ fn main() {
     pie_chart.add_slice("Company B", 33.0, [0, 220, 0]);
     pie_chart.add_slice("Company C", 33.0, [0, 0, 220]);
 
-    let mut rng = rand::thread_rng();
-    let update_data = move |chart: &mut PieChart| {
-        chart.datasets[0].1 += rng.gen_range(0.0..2.0); // Increment Company A's share
-        chart.datasets[1].1 += rng.gen_range(0.0..2.0); // Increment Company B's share
-        chart.datasets[2].1 += rng.gen_range(0.0..2.0); // Increment Company C's share
-    };
+    let handle3 = thread::spawn(move || {
+        let mut rng = rand::thread_rng();
+        let update_data = move |chart: &mut PieChart| {
+            chart.datasets[0].1 += rng.gen_range(0.0..2.0); // Increment Company A's share
+            chart.datasets[1].1 += rng.gen_range(0.0..2.0); // Increment Company B's share
+            chart.datasets[2].1 += rng.gen_range(0.0..2.0); // Increment Company C's share
+        };
 
-    // Display the pie chart in real-time
-    Winop::display_real_time(
-        &mut canvas,
-        &mut pie_chart,
-        "Real-Time Pie Chart",
-        update_data,
-        10,
-    );
+        // Display the pie chart in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut pie_chart,
+            "Real-Time Pie Chart",
+            update_data,
+            10,
+        );
+    });
 
-    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
-    let mut scatter_graph = ScatterGraph::new("Real-Time Scatter Graph", "X", "Y");
+    let handle4 = thread::spawn(move || {
+        let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+        let mut scatter_graph = ScatterGraph::new("Real-Time Scatter Graph", "X", "Y");
 
-    let dataset1 = ScatterGraphDataset::new([0, 220, 0], "Data1", ScatterDotType::Circle(5));
-    let dataset2 = ScatterGraphDataset::new([220, 0, 0], "Data2", ScatterDotType::Square(5));
-    let dataset3 = ScatterGraphDataset::new([0, 0, 220], "Data3", ScatterDotType::Triangle(5));
-    let mut rng = rand::thread_rng();
-    scatter_graph.add_dataset(dataset1);
-    scatter_graph.add_dataset(dataset2);
-    scatter_graph.add_dataset(dataset3);
+        let dataset1 = ScatterGraphDataset::new([0, 220, 0], "Data1", ScatterDotType::Circle(5));
+        let dataset2 = ScatterGraphDataset::new([220, 0, 0], "Data2", ScatterDotType::Square(5));
+        let dataset3 = ScatterGraphDataset::new([0, 0, 220], "Data3", ScatterDotType::Triangle(5));
+        let mut rng = rand::thread_rng();
+        scatter_graph.add_dataset(dataset1);
+        scatter_graph.add_dataset(dataset2);
+        scatter_graph.add_dataset(dataset3);
 
-    // Closure to update scatter graph data
-    let update_data = move |graph: &mut ScatterGraph| {
-        for i in 0..graph.datasets.len() {
-            let x = rng.gen_range(0.0..10.0);
-            let y = rng.gen_range(0.0..10.0);
-            graph.datasets[i].add_point((x, y));
-        }
-    };
+        // Closure to update scatter graph data
+        let update_data = move |graph: &mut ScatterGraph| {
+            for i in 0..graph.datasets.len() {
+                let x = rng.gen_range(0.0..10.0);
+                let y = rng.gen_range(0.0..10.0);
+                graph.datasets[i].add_point((x, y));
+            }
+        };
 
-    // Display the scatter graph in real-time
-    Winop::display_real_time(
-        &mut canvas,
-        &mut scatter_graph,
-        "Real-Time Scatter Graph",
-        update_data,
-        30,
-    );
+        // Display the scatter graph in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut scatter_graph,
+            "Real-Time Scatter Graph",
+            update_data,
+            30,
+        );
+    });
+
+    // histrogram
+    let handle5 = thread::spawn(move || {
+        let mut rng = rand::thread_rng();
+        let data: Vec<f64> = (0..1000).map(|_| rng.gen_range(-3.0..3.0)).collect();
+
+        // Create a Histogram
+        let mut histogram = Histogram::new(
+            "Histogram Example",
+            "Values",
+            "Frequency",
+            30,
+            [135, 206, 250], // Skyblue
+        );
+        histogram.add_data_vec(data);
+
+        // Draw the Histogram
+        let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+        // White background
+
+        let update_data = move |graph: &mut Histogram| {
+            graph.add_data(rng.gen_range(-3.0..3.0));
+        };
+
+        // Winop::display_with_window(&mut canvas, "Histogram Example");
+        // Display the histogram graph in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut histogram,
+            "Real-Time Histogram Graph",
+            update_data,
+            30,
+        );
+    });
+
+    let handle6 = thread::spawn(move || {
+        let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+        let mut bar_chart =
+            BarChart::new("Yearly Income", "Year", "Income", Orientation::Horizontal);
+
+        let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
+        dataset1.add_data(2020.0, 100.0);
+        dataset1.add_data(2021.0, 200.0);
+        dataset1.add_data(2022.0, 150.0);
+
+        let mut dataset2 = BarDataset::new("Company B", [0, 220, 0]);
+        dataset2.add_data(2020.0, 120.0);
+        dataset2.add_data(2021.0, 180.0);
+        dataset2.add_data(2022.0, 220.0);
+
+        let mut dataset3 = BarDataset::new("Company C", [0, 0, 220]);
+        dataset3.add_data(2020.0, 150.0);
+        dataset3.add_data(2021.0, 250.0);
+        dataset3.add_data(2022.0, 400.0);
+
+        let mut dataset4 = BarDataset::new("Company D", [150, 100, 50]);
+        dataset4.add_data(2020.0, 50.0);
+        dataset4.add_data(2021.0, 256.0);
+        dataset4.add_data(2022.0, 40.0);
+
+        bar_chart.add_dataset(dataset1);
+        bar_chart.add_dataset(dataset2);
+        bar_chart.add_dataset(dataset3);
+        bar_chart.add_dataset(dataset4);
+
+        bar_chart.draw(&mut canvas);
+        canvas.save_as_image("grouped_horizontal_bar_chart.png");
+
+        // let mut start_time = Instant::now();
+        let mut rng = rand::thread_rng();
+        // Closure to update data
+        let update_data = move |chart: &mut BarChart| {
+            for i in 0..chart.datasets.len() {
+                for point in chart.datasets[i].data.iter_mut() {
+                    point.1 += rng.gen_range(-20.0..30.0); // Increment x-value
+                }
+            }
+        };
+
+        // Display the bar chart in real-time
+        Winop::display_real_time(
+            &mut canvas,
+            &mut bar_chart,
+            "Real-Time Bar Chart",
+            update_data,
+            30,
+        );
+    });
+
+    handle1.join().unwrap();
+    handle2.join().unwrap();
+    handle3.join().unwrap();
+    handle4.join().unwrap();
+    handle5.join().unwrap();
+    handle6.join().unwrap();
 }
