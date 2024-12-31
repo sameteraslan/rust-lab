@@ -10,8 +10,7 @@ This project is a simple yet customizable 2D plotting library written in Rust. I
 - **Save functionality**: Save the rendered plot as an image file.
 
 
-### Output
-The above code generates a plot and saves it as `plot.png` in the current working directory.
+### PNG Outputs
 
 ![](./screenshots/cartesian_graph.png)
 ![](./screenshots/grouped_horizontal_bar_chart.png)
@@ -22,6 +21,19 @@ The above code generates a plot and saves it as `plot.png` in the current workin
 ![](./screenshots/area_chart.png)
 ![](./screenshots/histogram.png)
 ![](./screenshots/real_time.gif)
+
+
+### SVG Outputs
+
+![](./screenshots/cartesian_graph.svg)
+![](./screenshots/grouped_horizontal_bar_chart.svg)
+![](./screenshots/grouped_vertical_bar_chart.svg)
+![](./screenshots/pie_chart.svg)
+![](./screenshots/quadrant1_graph.svg)
+![](./screenshots/scatter_graph.svg)
+![](./screenshots/area_chart.svg)
+![](./screenshots/histogram.svg)
+
 
 ## Customization Options
 - **Title**: Set the title of the plot.

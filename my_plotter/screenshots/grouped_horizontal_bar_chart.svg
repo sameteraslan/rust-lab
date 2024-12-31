@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<rect x="0.00" y="0.00" width="800.00" height="600.00" fill="white" stroke="black" stroke-width="1.00" fill-opacity="1"/>
+<text x="400.00" y="40.00" font-size="24.00" text-anchor="middle" fill="black">Yearly Income</text>
+<line x1="80.00" y1="80.00" x2="80.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="144.00" y1="80.00" x2="144.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="208.00" y1="80.00" x2="208.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="272.00" y1="80.00" x2="272.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="336.00" y1="80.00" x2="336.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="400.00" y1="80.00" x2="400.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="464.00" y1="80.00" x2="464.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="528.00" y1="80.00" x2="528.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="592.00" y1="80.00" x2="592.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="656.00" y1="80.00" x2="656.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="720.00" y1="80.00" x2="720.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="80.00" x2="720.00" y2="80.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="124.00" x2="720.00" y2="124.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="168.00" x2="720.00" y2="168.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="212.00" x2="720.00" y2="212.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="256.00" x2="720.00" y2="256.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="300.00" x2="720.00" y2="300.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="344.00" x2="720.00" y2="344.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="388.00" x2="720.00" y2="388.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="432.00" x2="720.00" y2="432.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="476.00" x2="720.00" y2="476.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="520.00" x2="720.00" y2="520.00" stroke="lightgray" stroke-width="0.50"/>
+<line x1="80.00" y1="80.00" x2="80.00" y2="520.00" stroke="black" stroke-width="2.00"/>
+<line x1="80.00" y1="520.00" x2="720.00" y2="520.00" stroke="black" stroke-width="2.00"/>
+<line x1="80.00" y1="520.00" x2="80.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="80.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">0.0</text>
+<line x1="144.00" y1="520.00" x2="144.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="144.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">40.0</text>
+<line x1="208.00" y1="520.00" x2="208.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="208.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">80.0</text>
+<line x1="272.00" y1="520.00" x2="272.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="272.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">120.0</text>
+<line x1="336.00" y1="520.00" x2="336.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="336.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">160.0</text>
+<line x1="400.00" y1="520.00" x2="400.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="400.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">200.0</text>
+<line x1="464.00" y1="520.00" x2="464.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="464.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">240.0</text>
+<line x1="528.00" y1="520.00" x2="528.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="528.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">280.0</text>
+<line x1="592.00" y1="520.00" x2="592.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="592.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">320.0</text>
+<line x1="656.00" y1="520.00" x2="656.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="656.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">360.0</text>
+<line x1="720.00" y1="520.00" x2="720.00" y2="525.00" stroke="black" stroke-width="1.00"/>
+<text x="720.00" y="538.00" font-size="12.00" text-anchor="middle" fill="black">400.0</text>
+<text x="44.00" y="446.67" font-size="12.00" text-anchor="middle" fill="black">2020</text>
+<rect x="80.00" y="388.00" width="160.00" height="29.33" fill="rgb(220,0,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="417.33" width="192.00" height="29.33" fill="rgb(0,220,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="446.67" width="240.00" height="29.33" fill="rgb(0,0,220)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="476.00" width="80.00" height="29.33" fill="rgb(150,100,50)" stroke="black" stroke-width="1"/>
+<text x="44.00" y="300.00" font-size="12.00" text-anchor="middle" fill="black">2021</text>
+<rect x="80.00" y="241.33" width="320.00" height="29.33" fill="rgb(220,0,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="270.67" width="288.00" height="29.33" fill="rgb(0,220,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="300.00" width="400.00" height="29.33" fill="rgb(0,0,220)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="329.33" width="409.60" height="29.33" fill="rgb(150,100,50)" stroke="black" stroke-width="1"/>
+<text x="44.00" y="153.33" font-size="12.00" text-anchor="middle" fill="black">2022</text>
+<rect x="80.00" y="94.67" width="240.00" height="29.33" fill="rgb(220,0,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="124.00" width="352.00" height="29.33" fill="rgb(0,220,0)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="153.33" width="640.00" height="29.33" fill="rgb(0,0,220)" stroke="black" stroke-width="1"/>
+<rect x="80.00" y="182.67" width="64.00" height="29.33" fill="rgb(150,100,50)" stroke="black" stroke-width="1"/>
+<rect x="0.00" y="555.00" width="504.20" height="22.00" fill="white" stroke="black" stroke-width="0.50" fill-opacity="0.5"/>
+<rect x="5.00" y="560.00" width="12.00" height="12.00" fill="rgb(220,0,0)"/><text x="20.60" y="570.00" font-size="12.00" fill="black">Company A</text><rect x="129.80" y="560.00" width="12.00" height="12.00" fill="rgb(0,220,0)"/><text x="145.40" y="570.00" font-size="12.00" fill="black">Company B</text><rect x="254.60" y="560.00" width="12.00" height="12.00" fill="rgb(0,0,220)"/><text x="270.20" y="570.00" font-size="12.00" fill="black">Company C</text><rect x="379.40" y="560.00" width="12.00" height="12.00" fill="rgb(150,100,50)"/><text x="395.00" y="570.00" font-size="12.00" fill="black">Company D</text>
+</svg>

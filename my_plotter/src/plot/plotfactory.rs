@@ -5,8 +5,10 @@ use crate::plot::drawer::Drawer;
 use crate::plot::piechart::PieChart;
 
 use super::areachart::AreaChart;
+use super::canvas::Canvas;
 use super::historgram::Histogram;
 use super::scattergraph::ScatterGraph;
+use super::svgcanvas::SvgCanvas;
 
 pub enum PlotType {
     BarChart,
@@ -17,9 +19,21 @@ pub enum PlotType {
     Histogram,
 }
 
+pub enum OutputFormat {
+    PixelCanvas,
+    Svg,
+}
+
 pub struct PlotFactory;
 
 impl PlotFactory {
+    pub fn create_canvas(format: OutputFormat, width: u32, height: u32) -> Box<dyn Drawer> {
+        match format {
+            OutputFormat::PixelCanvas => Box::new(Canvas::new(width, height, [255, 255, 255], 10)),
+            OutputFormat::Svg => Box::new(SvgCanvas::new(width, height, "white", 10)),
+        }
+    }
+
     pub fn create_plot(plot_type: PlotType) -> Box<dyn Drawer> {
         match plot_type {
             PlotType::BarChart => Box::new(BarChart::new(
