@@ -1,16 +1,19 @@
+use crate::plot::canvas::Canvas;
+use image::ImageBuffer;
+use imageproc::drawing::{draw_line_segment_mut, draw_text_mut, text_size};
+use minifb::{Key, MouseMode, Window, WindowOptions};
+use resvg::{
+    tiny_skia::{self, Pixmap},
+    usvg::{self, fontdb},
+};
 use std::{
     thread,
     time::{Duration, Instant},
 };
 
-use crate::plot::canvas::Canvas;
-use image::ImageBuffer;
-use imageproc::drawing::{draw_line_segment_mut, draw_text_mut, text_size};
-use minifb::{Key, MouseMode, Window, WindowOptions};
-
 use super::{
     barchart::BarChart, cartesiangraph::CartesianGraph, drawer::Drawer, historgram::Histogram,
-    linetype::LineType, piechart::PieChart, scattergraph::ScatterGraph,
+    piechart::PieChart, scattergraph::ScatterGraph,
 };
 
 pub struct Winop;
@@ -18,6 +21,68 @@ pub struct Winop;
 impl Winop {
     pub fn new() -> Self {
         Self
+    }
+
+    pub fn display_svg(svg_content: &str, window_title: &str) {
+        // Initialize a font database
+        let mut fontdb = fontdb::Database::new();
+
+        // Load a custom font (e.g., Arial)
+        fontdb.load_system_fonts(); // Loads system fonts
+        fontdb.load_font_data(include_bytes!("../../resources/fonts/Arial.ttf").to_vec());
+
+        // Parse the SVG content
+        let mut opt = usvg::Options::default();
+        opt.fontdb = fontdb.into();
+        let tree = usvg::Tree::from_str(svg_content, &opt).expect("Failed to parse SVG");
+
+        // Parse the SVG content
+        // let tree = usvg::Tree::from_str(svg_content, &usvg::Options::default())
+        //     .expect("Failed to parse SVG");
+
+        // Get the dimensions of the SVG from the view box
+        let size = tree.size();
+        let width = size.width() as usize;
+        let height = size.height() as usize;
+
+        // Render the SVG into a pixmap
+        let mut pixmap = Pixmap::new(width as u32, height as u32).expect("Failed to create pixmap");
+        resvg::render(&tree, tiny_skia::Transform::default(), &mut pixmap.as_mut());
+
+        // Convert the pixmap into a pixel buffer
+        let buffer: Vec<u32> = pixmap
+            .pixels()
+            .iter()
+            .map(|pixel| {
+                let r = pixel.red();
+                let g = pixel.green();
+                let b = pixel.blue();
+                let a = pixel.alpha();
+
+                // Convert RGBA to ARGB format for minifb
+                ((a as u32) << 24) | ((r as u32) << 16) | ((g as u32) << 8) | (b as u32)
+            })
+            .collect();
+
+        // Create a minifb window
+        let mut window = Window::new(
+            window_title,
+            width,
+            height,
+            WindowOptions {
+                resize: false,
+                scale: minifb::Scale::X1,
+                ..WindowOptions::default()
+            },
+        )
+        .expect("Unable to create window");
+
+        // Display the image in the window
+        while window.is_open() && !window.is_key_down(Key::Escape) {
+            window
+                .update_with_buffer(&buffer, width, height)
+                .expect("Failed to update buffer");
+        }
     }
 
     /// Displays the plot in real-time with continuous updates

@@ -89,7 +89,7 @@ impl SvgCanvas {
         fill_color: &str,
         stroke_color: &str,
         stroke_width: f64,
-        opacity: f64
+        opacity: f64,
     ) {
         self.elements.push(format!(
             r#"<rect x="{:.2}" y="{:.2}" width="{:.2}" height="{:.2}" fill="{}" stroke="{}" stroke-width="{:.2}" fill-opacity="{}"/>"#,
@@ -161,5 +161,14 @@ impl SvgCanvas {
         }
         writeln!(file, "</svg>")?;
         Ok(())
+    }
+
+    pub fn get_svg_as_text(&self) -> String {
+        let mut svg = String::new();
+        for element in &self.elements {
+            svg.push_str(element);
+        }
+        svg.push_str("</svg>");
+        svg
     }
 }

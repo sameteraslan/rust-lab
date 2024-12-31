@@ -721,4 +721,7 @@ fn main() {
 
     bar_chart.draw_svg(&mut canvas);
     canvas.save("grouped_horizontal_bar_chart.svg").unwrap();
+
+    let svg_text = canvas.get_svg_as_text();
+    Winop::display_svg(&svg_text, "Bar Chart Example");
 }

@@ -213,7 +213,7 @@ impl Drawer for AreaChart {
             "white",
             "black",
             0.5,
-            0.5
+            0.5,
         );
 
         // Add the legend elements to the canvas
