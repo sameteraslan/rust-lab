@@ -1,17 +1,19 @@
 use my_plotter::dataset::Dataset;
 use my_plotter::drawer::Drawer;
+use my_plotter::figure;
+use my_plotter::figure::areachart::AreaChart;
+use my_plotter::figure::areachartdataset::AreaChartDataset;
+use my_plotter::figure::barchart::BarChart;
+use my_plotter::figure::bardataset::BarDataset;
+use my_plotter::figure::canvas::Canvas;
+use my_plotter::figure::cartesiangraph::CartesianGraph;
+use my_plotter::figure::cartesiangraphdataset::CartesianDataset;
+use my_plotter::figure::figureconfig::FigureConfig;
+use my_plotter::figure::linetype::LineType;
+use my_plotter::figure::orientation::Orientation;
+use my_plotter::figure::piechart::PieChart;
+use my_plotter::figure::scatterdottype::ScatterDotType;
 use my_plotter::historgram::Histogram;
-use my_plotter::plot::areachart::AreaChart;
-use my_plotter::plot::areachartdataset::AreaChartDataset;
-use my_plotter::plot::barchart::BarChart;
-use my_plotter::plot::bardataset::BarDataset;
-use my_plotter::plot::canvas::Canvas;
-use my_plotter::plot::cartesiangraph::CartesianGraph;
-use my_plotter::plot::cartesiangraphdataset::CartesianDataset;
-use my_plotter::plot::linetype::LineType;
-use my_plotter::plot::orientation::Orientation;
-use my_plotter::plot::piechart::PieChart;
-use my_plotter::plot::scatterdottype::ScatterDotType;
 use my_plotter::quadrant1graph::Quadrant1Graph;
 use my_plotter::scattergraph::ScatterGraph;
 use my_plotter::scattergraphdataset::ScatterGraphDataset;
@@ -23,36 +25,59 @@ use std::thread;
 
 fn main() {
     // // Initialize the canvas
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
-    // let mut bar_chart = BarChart::new("Yearly Income", "Year", "Income", Orientation::Vertical);
+    let figure_config = FigureConfig {
+        font_size_title: 20.0,
+        font_size_label: 16.0,
+        font_size_legend: 14.0,
+        color_axis: [0, 0, 0],
+        color_background: [0, 0, 0],
+        color_grid: [220, 220, 220],
+        num_axis_ticks: 20,
+        num_grid_horizontal: 20,
+        num_grid_vertical: 20,
+        font_label: "C:/Users/samet/Desktop/Rust/rust-lab/my_plotter/resources/fonts/Arial.ttf"
+            .to_string(),
+        font_title: "C:/Users/samet/Desktop/Rust/rust-lab/my_plotter/resources/fonts/Arial.ttf"
+            .to_string(),
+        ..Default::default()
+    };
 
-    // let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
-    // dataset1.add_data(2020.0, 100.0);
-    // dataset1.add_data(2021.0, 200.0);
-    // dataset1.add_data(2022.0, 150.0);
+    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    let mut bar_chart = BarChart::new(
+        "Yearly Income",
+        "Year",
+        "Income",
+        Orientation::Horizontal,
+        figure_config.clone(),
+    );
 
-    // let mut dataset2 = BarDataset::new("Company B", [0, 220, 0]);
-    // dataset2.add_data(2020.0, 120.0);
-    // dataset2.add_data(2021.0, 180.0);
-    // dataset2.add_data(2022.0, 220.0);
+    let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
+    dataset1.add_data(2020.0, 100.0);
+    dataset1.add_data(2021.0, 200.0);
+    dataset1.add_data(2022.0, 150.0);
 
-    // let mut dataset3 = BarDataset::new("Company C", [0, 0, 220]);
-    // dataset3.add_data(2020.0, 150.0);
-    // dataset3.add_data(2021.0, 250.0);
-    // dataset3.add_data(2022.0, 400.0);
+    let mut dataset2 = BarDataset::new("Company B", [0, 220, 0]);
+    dataset2.add_data(2020.0, 120.0);
+    dataset2.add_data(2021.0, 180.0);
+    dataset2.add_data(2022.0, 220.0);
 
-    // let mut dataset4 = BarDataset::new("Company D", [150, 100, 50]);
-    // dataset4.add_data(2020.0, 50.0);
-    // dataset4.add_data(2021.0, 256.0);
-    // dataset4.add_data(2022.0, 40.0);
+    let mut dataset3 = BarDataset::new("Company C", [0, 0, 220]);
+    dataset3.add_data(2020.0, 150.0);
+    dataset3.add_data(2021.0, 250.0);
+    dataset3.add_data(2022.0, 400.0);
 
-    // bar_chart.add_dataset(dataset1);
-    // bar_chart.add_dataset(dataset2);
-    // bar_chart.add_dataset(dataset3);
-    // bar_chart.add_dataset(dataset4);
+    let mut dataset4 = BarDataset::new("Company D", [150, 100, 50]);
+    dataset4.add_data(2020.0, 50.0);
+    dataset4.add_data(2021.0, 256.0);
+    dataset4.add_data(2022.0, 40.0);
 
-    // bar_chart.draw(&mut canvas);
-    // canvas.save_as_image("grouped_vertical_bar_chart.png");
+    bar_chart.add_dataset(dataset1);
+    bar_chart.add_dataset(dataset2);
+    bar_chart.add_dataset(dataset3);
+    bar_chart.add_dataset(dataset4);
+
+    bar_chart.draw(&mut canvas);
+    canvas.save_as_image("grouped_vertical_bar_chart.png");
 
     // // Initialize the canvas
     // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
@@ -210,33 +235,33 @@ fn main() {
 
     // // Area Chart
 
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
-    // let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis");
+    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis", figure_config.clone());
 
-    // let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
-    // dataset1.add_point((0.0, 0.0));
-    // dataset1.add_point((1.0, 2.0));
-    // dataset1.add_point((2.0, 1.0));
-    // dataset1.add_point((3.0, 3.0));
+    let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
+    dataset1.add_point((0.0, 0.0));
+    dataset1.add_point((1.0, 2.0));
+    dataset1.add_point((2.0, 1.0));
+    dataset1.add_point((3.0, 3.0));
 
-    // let mut dataset2 = AreaChartDataset::new([0, 220, 0], "Dataset 2", 0.5);
-    // dataset2.add_point((0.0, 1.0));
-    // dataset2.add_point((1.0, 1.5));
-    // dataset2.add_point((2.0, 0.5));
-    // dataset2.add_point((3.0, 2.0));
+    let mut dataset2 = AreaChartDataset::new([0, 220, 0], "Dataset 2", 0.5);
+    dataset2.add_point((0.0, 1.0));
+    dataset2.add_point((1.0, 1.5));
+    dataset2.add_point((2.0, 0.5));
+    dataset2.add_point((3.0, 2.0));
 
-    // let mut dataset3 = AreaChartDataset::new([0, 0, 220], "Dataset 3", 0.5);
-    // dataset3.add_point((0.0, 2.5));
-    // dataset3.add_point((1.0, 0.5));
-    // dataset3.add_point((2.0, 0.5));
-    // dataset3.add_point((3.0, 1.5));
+    let mut dataset3 = AreaChartDataset::new([0, 0, 220], "Dataset 3", 0.5);
+    dataset3.add_point((0.0, 2.5));
+    dataset3.add_point((1.0, 0.5));
+    dataset3.add_point((2.0, 0.5));
+    dataset3.add_point((3.0, 1.5));
 
-    // area_chart.add_dataset(dataset1);
-    // area_chart.add_dataset(dataset2);
-    // area_chart.add_dataset(dataset3);
+    area_chart.add_dataset(dataset1);
+    area_chart.add_dataset(dataset2);
+    area_chart.add_dataset(dataset3);
 
-    // area_chart.draw(&mut canvas);
-    // canvas.save_as_image("area_chart.png");
+    area_chart.draw(&mut canvas);
+    canvas.save_as_image("area_chart.png");
 
     // // Histogram
 
@@ -494,7 +519,7 @@ fn main() {
     // handle5.join().unwrap();
     // handle6.join().unwrap();
 
-    let mut graph = CartesianGraph::new("Example Graph", "X Axis", "Y Axis");
+    let mut graph = CartesianGraph::new("Example Graph", "X Axis", "Y Axis", &figure_config);
 
     // Add datasets to the graph
     let mut dataset1 = CartesianDataset::new([220, 0, 0], "Dataset1", LineType::Solid);
@@ -525,7 +550,7 @@ fn main() {
     svg_canvas.save("output.svg").unwrap();
 
     let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis");
+    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis", figure_config);
 
     let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
     dataset1.add_point((0.0, 0.0));
@@ -660,7 +685,13 @@ fn main() {
 
     // Initialize the canvas
     let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut bar_chart = BarChart::new("Yearly Income", "Year", "Income", Orientation::Vertical);
+    let mut bar_chart = BarChart::new(
+        "Yearly Income",
+        "Year",
+        "Income",
+        Orientation::Vertical,
+        FigureConfig::default(),
+    );
 
     let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
     dataset1.add_data(2020.0, 100.0);
@@ -691,8 +722,30 @@ fn main() {
     canvas.save("grouped_vertical_bar_chart.svg").unwrap();
 
     // Initialize the canvas
+    let figure_config = FigureConfig {
+        font_size_title: 20.0,
+        font_size_label: 16.0,
+        font_size_legend: 14.0,
+        color_axis: [0, 0, 0],
+        color_background: [0, 0, 0],
+        color_grid: [0, 0, 0],
+        num_axis_ticks: 20,
+        num_grid_horizontal: 20,
+        num_grid_vertical: 20,
+        font_label: "C:/Users/samet/Desktop/Rust/rust-lab/my_plotter/resources/fonts/Arial.ttf"
+            .to_string(),
+        font_title: "C:/Users/samet/Desktop/Rust/rust-lab/my_plotter/resources/fonts/Arial.ttf"
+            .to_string(),
+        ..Default::default()
+    };
     let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut bar_chart = BarChart::new("Yearly Income", "Year", "Income", Orientation::Horizontal);
+    let mut bar_chart = BarChart::new(
+        "Yearly Income",
+        "Year",
+        "Income",
+        Orientation::Vertical,
+        figure_config,
+    );
 
     let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
     dataset1.add_data(2020.0, 100.0);

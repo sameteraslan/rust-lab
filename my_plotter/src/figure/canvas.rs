@@ -1,4 +1,4 @@
-use crate::plot::linetype::LineType;
+use crate::figure::linetype::LineType;
 use ab_glyph::{FontRef, PxScale};
 use image::Rgb;
 use imageproc::drawing::{draw_text_mut, text_size};
@@ -69,11 +69,11 @@ impl Canvas {
         }
     }
 
-    pub fn draw_grid(&mut self, grid_size: u32, color: [u8; 3]) {
-        for x in (self.margin..=self.width - self.margin).step_by(grid_size as usize) {
+    pub fn draw_grid(&mut self, grid_size: &[usize; 2], color: [u8; 3]) {
+        for x in (self.margin..=self.width - self.margin).step_by(grid_size[0]) {
             self.draw_vertical_line(x, color);
         }
-        for y in (self.margin..=self.height - self.margin).step_by(grid_size as usize) {
+        for y in (self.margin..=self.height - self.margin).step_by(grid_size[1]) {
             self.draw_horizontal_line(y, color);
         }
     }

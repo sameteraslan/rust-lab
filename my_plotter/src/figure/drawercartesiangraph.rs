@@ -197,7 +197,8 @@ impl Drawer for CartesianGraph {
             &font,
             scale_title,
         );
-        canvas.draw_grid(20, [200, 200, 200]);
+
+        canvas.draw_grid(&[20, 20], [200, 200, 200]);
 
         // Ensure x_min and x_max are symmetric
         let abs_x_min = self.x_min.abs();

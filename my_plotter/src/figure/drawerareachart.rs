@@ -2,11 +2,11 @@ use ab_glyph::{FontRef, PxScale};
 use imageproc::drawing::text_size;
 
 use super::{
-    canvas::Canvas, drawer::Drawer, scatterdottype::ScatterDotType, scattergraph::ScatterGraph,
-    svgcanvas::SvgCanvas,
+    areachart::AreaChart, axistype::AxisType, canvas::Canvas, drawer::Drawer, svgcanvas::SvgCanvas,
+    utils,
 };
 
-impl Drawer for ScatterGraph {
+impl Drawer for AreaChart {
     fn draw_svg(&mut self, svg_canvas: &mut SvgCanvas) {
         let width = svg_canvas.width as f64;
         let height = svg_canvas.height as f64;
@@ -42,6 +42,10 @@ impl Drawer for ScatterGraph {
                 (min.min(y), max.max(y))
             });
 
+        // Adjust limits to include (0, 0)
+        let x_min = x_min.min(0.0);
+        let y_min = y_min.min(0.0);
+
         let scale_x = (width - 2.0 * margin) / (x_max - x_min);
         let scale_y = (height - 2.0 * margin) / (y_max - y_min);
 
@@ -58,13 +62,12 @@ impl Drawer for ScatterGraph {
         );
 
         // Draw axes
-        let origin_x = margin - x_min * scale_x; // Adjust for negative X values
-        let origin_y = height - margin + y_min * scale_y; // Adjust for negative Y values
+        let origin_x = margin + (0.0 - x_min) * scale_x;
+        let origin_y = height - margin - (0.0 - y_min) * scale_y;
 
         svg_canvas.draw_line(margin, origin_y, width - margin, origin_y, "black", 2.0); // X-axis
         svg_canvas.draw_line(origin_x, margin, origin_x, height - margin, "black", 2.0); // Y-axis
 
-        // Draw tick marks and values for X-axis
         // X-axis
         let mut x_axis_ticks = String::new();
         for i in 0..=num_ticks {
@@ -112,7 +115,6 @@ impl Drawer for ScatterGraph {
             y_axis_ticks
         ));
 
-        // Draw X-axis label
         svg_canvas.draw_text(
             width - margin,
             height - margin / 2.0,
@@ -132,83 +134,40 @@ impl Drawer for ScatterGraph {
             self.y_label
         ));
 
-        // Plot datasets with scatter dot types
+        // Draw areas under the datasets
         for dataset in &self.datasets {
+            let mut path_data = String::new();
+            let mut first_point = true;
+
+            // Move to the initial point
             for &(x, y) in &dataset.points {
-                let dot_type = &dataset.dot_type;
                 let svg_x = margin + (x - x_min) * scale_x;
                 let svg_y = height - margin - (y - y_min) * scale_y;
 
-                match dot_type {
-                    ScatterDotType::Circle(radius) => {
-                        svg_canvas.draw_circle(
-                            svg_x,
-                            svg_y,
-                            *radius as f64,
-                            &format!(
-                                "rgb({},{},{})",
-                                dataset.color[0], dataset.color[1], dataset.color[2]
-                            ),
-                        );
-                    }
-                    ScatterDotType::Square(side) => {
-                        let half_side = *side as f64 / 2.0;
-                        svg_canvas.draw_rect(
-                            svg_x - half_side,
-                            svg_y - half_side,
-                            *side as f64,
-                            *side as f64,
-                            &format!(
-                                "rgb({},{},{})",
-                                dataset.color[0], dataset.color[1], dataset.color[2]
-                            ),
-                            "none",
-                            1.0,
-                            1.0,
-                        );
-                    }
-                    ScatterDotType::Cross(thickness) => {
-                        svg_canvas.draw_line(
-                            svg_x - *thickness as f64,
-                            svg_y,
-                            svg_x + *thickness as f64,
-                            svg_y,
-                            &format!(
-                                "rgb({},{},{})",
-                                dataset.color[0], dataset.color[1], dataset.color[2]
-                            ),
-                            2.0,
-                        );
-                        svg_canvas.draw_line(
-                            svg_x,
-                            svg_y - *thickness as f64,
-                            svg_x,
-                            svg_y + *thickness as f64,
-                            &format!(
-                                "rgb({},{},{})",
-                                dataset.color[0], dataset.color[1], dataset.color[2]
-                            ),
-                            2.0,
-                        );
-                    }
-                    ScatterDotType::Triangle(base_size) => {
-                        let half_base = *base_size as f64 / 2.0;
-                        let height = (*base_size as f64 * 0.866); // Height of an equilateral triangle
-                        svg_canvas.elements.push(format!(
-                            r#"<polygon points="{:.2},{:.2} {:.2},{:.2} {:.2},{:.2}" fill="rgb({},{},{})"/>"#,
-                            svg_x,
-                            svg_y - height / 2.0,
-                            svg_x - half_base,
-                            svg_y + height / 2.0,
-                            svg_x + half_base,
-                            svg_y + height / 2.0,
-                            dataset.color[0],
-                            dataset.color[1],
-                            dataset.color[2]
-                        ));
-                    }
+                if first_point {
+                    path_data.push_str(&format!("M {:.2},{:.2} ", svg_x, origin_y));
+                    first_point = false;
                 }
+
+                path_data.push_str(&format!("L {:.2},{:.2} ", svg_x, svg_y));
             }
+
+            // Close the path back to the x-axis
+            if let Some(&(last_x, _)) = dataset.points.last() {
+                let svg_x = margin + (last_x - x_min) * scale_x;
+                path_data.push_str(&format!("L {:.2},{:.2} Z", svg_x, origin_y));
+            }
+
+            svg_canvas.elements.push(format!(
+                r#"<path d="{}" fill="rgba({}, {}, {}, 0.5)" stroke="rgb({}, {}, {})" stroke-width="1"/>"#,
+                path_data,
+                dataset.color[0],
+                dataset.color[1],
+                dataset.color[2],
+                dataset.color[0],
+                dataset.color[1],
+                dataset.color[2],
+            ));
         }
 
         // Draw legend
@@ -267,16 +226,13 @@ impl Drawer for ScatterGraph {
     fn draw(&mut self, canvas: &mut Canvas) {
         canvas.clear();
 
-        let font =
-            FontRef::try_from_slice(include_bytes!("../../resources/fonts/Arial.ttf")).unwrap();
-        let scale_title = PxScale { x: 20.0, y: 20.0 };
-        let scale_labels = PxScale { x: 15.0, y: 15.0 };
+        let margin = canvas.margin;
+        let width = canvas.width;
+        let height = canvas.height;
+        let cfg = &self.config;
 
         // Draw the title
-        let (w_title, h_title) = text_size(scale_title, &font, &self.title);
-        let title_x = (canvas.width).saturating_sub(w_title) / 2;
-        let title_y = (canvas.margin / 3).saturating_sub(h_title) as u32;
-        canvas.draw_text(title_x, title_y, &self.title, [0, 0, 0], &font, scale_title);
+        self.draw_title(canvas, &cfg, width / 2, margin / 2, &self.title);
 
         // Calculate dataset limits
         let (x_min, x_max) = self
@@ -304,37 +260,18 @@ impl Drawer for ScatterGraph {
         let scale_y = (canvas.height - 2 * canvas.margin) as f64 / (y_max - y_min);
 
         // Draw grids
-        canvas.draw_grid(20, [200, 200, 200]);
+        canvas.draw_grid(&[20, 20], [200, 200, 200]);
 
-        canvas.draw_vertical_line(canvas.margin, [0, 0, 0]);
-        canvas.draw_vertical_line(canvas.width - canvas.margin, [0, 0, 0]);
-        canvas.draw_horizontal_line(canvas.height - canvas.margin, [0, 0, 0]);
-        canvas.draw_horizontal_line(canvas.margin, [0, 0, 0]);
+        // Draw axes
+        // let origin_x = canvas.margin as i32;
+        // let origin_y = canvas.height as i32 - canvas.margin as i32;
 
-        let origin_x = canvas.margin as i32 + ((0.0 - x_min) * scale_x) as i32;
-        let origin_y =
-            canvas.height as i32 - canvas.margin as i32 - ((0.0 - y_min) * scale_y) as i32;
+        // Draw axes
+        let origin_x = canvas.margin + ((0.0 - x_min) * scale_x) as u32;
+        let origin_y = height - margin - ((0.0 - y_min) * scale_y) as u32;
 
-        let (w, h) = text_size(scale_labels, &font, &self.x_label);
-        // Draw axes labels
-        canvas.draw_text(
-            canvas.width - canvas.margin + w / 2,
-            origin_y as u32 - h / 2,
-            &self.x_label,
-            [0, 0, 0],
-            &font,
-            scale_labels,
-        );
-
-        let (w, h) = text_size(scale_labels, &font, &self.y_label);
-        canvas.draw_text(
-            origin_x as u32 - w / 2,
-            canvas.margin - h - 10,
-            &self.y_label,
-            [0, 0, 0],
-            &font,
-            scale_labels,
-        );
+        self.draw_label(canvas, cfg, width - margin / 2, origin_y, &self.y_label);
+        self.draw_label(canvas, cfg, margin, margin / 2, &self.x_label);
 
         // Draw axis tick values
         let num_ticks = 10;
@@ -343,54 +280,46 @@ impl Drawer for ScatterGraph {
         let x_tick_step = (x_max - x_min) / num_ticks as f64;
         for i in 0..=num_ticks {
             let value_x = x_min + i as f64 * x_tick_step;
-            let tick_x = origin_x + ((value_x - x_min) * scale_x) as i32;
+            let tick_x = origin_x + ((value_x - x_min) * scale_x) as u32;
 
             let value_label = format!("{:.2}", value_x);
-            let (w, h) = text_size(scale_labels, &font, &value_label);
-
-            canvas.draw_text(
-                (tick_x - w as i32 / 2).max(0) as u32,
-                (origin_y + h as i32).min(canvas.height as i32 - 1) as u32,
-                &value_label,
-                [0, 0, 0],
-                &font,
-                scale_labels,
-            );
+            self.draw_axis_value(canvas, cfg, tick_x, origin_y, &value_label, AxisType::AxisX);
         }
 
         // Y-axis ticks
         let y_tick_step = (y_max - y_min) / num_ticks as f64;
         for i in 0..=num_ticks {
             let value_y = y_min + i as f64 * y_tick_step;
-            let tick_y = origin_y - ((value_y - y_min) * scale_y) as i32;
+            let tick_y = origin_y - ((value_y - y_min) * scale_y) as u32;
 
             let value_label = format!("{:.2}", value_y);
-            let (w, h) = text_size(scale_labels, &font, &value_label);
 
-            canvas.draw_text(
-                (origin_x - w as i32 - 5).max(0) as u32,
-                (tick_y - h as i32 / 2).max(0) as u32,
+            self.draw_axis_value(
+                canvas,
+                cfg,
+                origin_x - 10,
+                tick_y,
                 &value_label,
-                [0, 0, 0],
-                &font,
-                scale_labels,
+                AxisType::AxisY,
             );
         }
 
-        // Draw scatter points
+        // Draw areas under the curves
         for dataset in &self.datasets {
-            for &(_x, _y) in &dataset.points {
-                // Draw a small square or circle to represent the point
-                for dataset in &self.datasets {
-                    for &(x, y) in &dataset.points {
-                        let px = origin_x + ((x - x_min) * scale_x) as i32;
-                        let py = origin_y - ((y - y_min) * scale_y) as i32;
-
-                        self.draw_dot(canvas, px, py, dataset.dot_type.clone(), dataset.color);
-                    }
-                }
-            }
+            self.draw_area(
+                canvas,
+                dataset,
+                origin_x as i32,
+                origin_y as i32,
+                scale_x,
+                scale_y,
+            );
         }
+
+        canvas.draw_vertical_line(canvas.margin, [0, 0, 0]);
+        canvas.draw_vertical_line(canvas.width - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.height - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.margin, [0, 0, 0]);
 
         // Draw legend
         self.draw_legend(canvas);

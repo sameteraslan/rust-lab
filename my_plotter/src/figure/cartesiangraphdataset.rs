@@ -1,4 +1,4 @@
-use crate::plot::linetype::LineType;
+use crate::figure::linetype::LineType;
 
 pub struct CartesianDataset {
     pub points: Vec<(f64, f64)>,

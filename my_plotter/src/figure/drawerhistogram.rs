@@ -152,7 +152,7 @@ impl Drawer for Histogram {
         let scale_y = (canvas.height - 2 * canvas.margin) as f64 / y_max;
 
         canvas.clear();
-        canvas.draw_grid(50, [200, 200, 200]);
+        canvas.draw_grid(&[20, 20], [200, 200, 200]);
 
         // Draw axes
         let origin_x = canvas.margin as i32;

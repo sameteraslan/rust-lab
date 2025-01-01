@@ -1,5 +1,5 @@
-use crate::plot::bardataset::BarDataset;
-use crate::plot::cartesiangraphdataset::CartesianDataset;
+use crate::figure::bardataset::BarDataset;
+use crate::figure::cartesiangraphdataset::CartesianDataset;
 
 use super::areachartdataset::AreaChartDataset;
 use super::scattergraphdataset::ScatterGraphDataset;

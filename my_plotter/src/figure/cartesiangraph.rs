@@ -1,6 +1,6 @@
-use crate::plot::cartesiangraphdataset::CartesianDataset;
+use crate::figure::cartesiangraphdataset::CartesianDataset;
 
-use super::dataset;
+use super::figureconfig::FigureConfig;
 
 pub struct CartesianGraph {
     pub datasets: Vec<CartesianDataset>,
@@ -11,10 +11,11 @@ pub struct CartesianGraph {
     pub x_max: f64, // Maximum x-value
     pub y_min: f64, // Minimum y-value
     pub y_max: f64, // Maximum y-value
+    pub config: FigureConfig,
 }
 
 impl CartesianGraph {
-    pub fn new(title: &str, x_label: &str, y_label: &str) -> Self {
+    pub fn new(title: &str, x_label: &str, y_label: &str, config: &FigureConfig) -> Self {
         Self {
             datasets: Vec::new(),
             title: title.to_string(),
@@ -24,6 +25,7 @@ impl CartesianGraph {
             x_max: f64::NEG_INFINITY, // Initialize to min range
             y_min: f64::INFINITY,     // Initialize to max range
             y_max: f64::NEG_INFINITY, // Initialize to min range
+            config: config.clone(),
         }
     }
 

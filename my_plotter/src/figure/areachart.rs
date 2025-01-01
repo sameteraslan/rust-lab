@@ -1,19 +1,21 @@
-use super::{areachartdataset::AreaChartDataset, canvas::Canvas};
+use super::{areachartdataset::AreaChartDataset, canvas::Canvas, figureconfig::FigureConfig};
 
 pub struct AreaChart {
     pub title: String,
     pub x_label: String,
     pub y_label: String,
     pub datasets: Vec<AreaChartDataset>,
+    pub config: FigureConfig,
 }
 
 impl AreaChart {
-    pub fn new(title: &str, x_label: &str, y_label: &str) -> Self {
+    pub fn new(title: &str, x_label: &str, y_label: &str, config: FigureConfig) -> Self {
         Self {
             title: title.to_string(),
             x_label: x_label.to_string(),
             y_label: y_label.to_string(),
             datasets: Vec::new(),
+            config,
         }
     }
 

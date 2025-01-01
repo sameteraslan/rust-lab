@@ -1,4 +1,4 @@
-use crate::plot::canvas::Canvas;
+use crate::figure::canvas::Canvas;
 use image::ImageBuffer;
 use imageproc::drawing::{draw_line_segment_mut, draw_text_mut, text_size};
 use minifb::{Key, MouseMode, Window, WindowOptions};

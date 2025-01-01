@@ -1,9 +1,9 @@
 use ab_glyph::{FontRef, PxScale};
 use imageproc::drawing::text_size;
 
-use super::{areachart::AreaChart, canvas::Canvas, drawer::Drawer, svgcanvas::SvgCanvas};
+use super::{canvas::Canvas, drawer::Drawer, quadrant1graph::Quadrant1Graph, svgcanvas::SvgCanvas};
 
-impl Drawer for AreaChart {
+impl Drawer for Quadrant1Graph {
     fn draw_svg(&mut self, svg_canvas: &mut SvgCanvas) {
         let width = svg_canvas.width as f64;
         let height = svg_canvas.height as f64;
@@ -39,10 +39,6 @@ impl Drawer for AreaChart {
                 (min.min(y), max.max(y))
             });
 
-        // Adjust limits to include (0, 0)
-        let x_min = x_min.min(0.0);
-        let y_min = y_min.min(0.0);
-
         let scale_x = (width - 2.0 * margin) / (x_max - x_min);
         let scale_y = (height - 2.0 * margin) / (y_max - y_min);
 
@@ -58,60 +54,46 @@ impl Drawer for AreaChart {
             "lightgray",
         );
 
-        // Draw axes
-        let origin_x = margin + (0.0 - x_min) * scale_x;
-        let origin_y = height - margin - (0.0 - y_min) * scale_y;
+        // Draw axes (only positive X and Y axes for Quadrant 1)
+        svg_canvas.draw_line(
+            margin,
+            height - margin,
+            width - margin,
+            height - margin,
+            "black",
+            2.0,
+        ); // X-axis
+        svg_canvas.draw_line(margin, margin, margin, height - margin, "black", 2.0); // Y-axis
 
-        svg_canvas.draw_line(margin, origin_y, width - margin, origin_y, "black", 2.0); // X-axis
-        svg_canvas.draw_line(origin_x, margin, origin_x, height - margin, "black", 2.0); // Y-axis
-
-        // X-axis
-        let mut x_axis_ticks = String::new();
+        // Draw tick marks and values for X-axis
         for i in 0..=num_ticks {
             let value = x_min + i as f64 * (x_max - x_min) / num_ticks as f64;
             let x = margin + i as f64 * (width - 2.0 * margin) / num_ticks as f64;
-            let tick_start_y = origin_y - 5.0;
-            let tick_end_y = origin_y + 5.0;
 
-            x_axis_ticks.push_str(&format!(
-                "M {:.2},{:.2} L {:.2},{:.2} ",
-                x, tick_start_y, x, tick_end_y
-            ));
-
-            // Draw value as text (fallback to basic SVG <text>)
-            svg_canvas.elements.push(format!(
-            r#"<text x="{:.2}" y="{:.2}" font-size="{:.2}" text-anchor="middle" fill="black">{:.1}</text>"#,
-            x, height - margin + font_size * 1.5, font_size, value));
+            svg_canvas.draw_text(
+                x,
+                height - margin + font_size * 1.5,
+                &format!("{:.1}", value),
+                font_size,
+                "black",
+            );
         }
-        svg_canvas.elements.push(format!(
-            r#"<path d="{}" stroke="black" stroke-width="1" fill="none"/>"#,
-            x_axis_ticks
-        ));
 
-        // Y-axis
-        let mut y_axis_ticks = String::new();
+        // Draw tick marks and values for Y-axis
         for i in 0..=num_ticks {
             let value = y_min + i as f64 * (y_max - y_min) / num_ticks as f64;
             let y = height - margin - i as f64 * (height - 2.0 * margin) / num_ticks as f64;
-            let tick_start_x = origin_x - 5.0;
-            let tick_end_x = origin_x + 5.0;
 
-            y_axis_ticks.push_str(&format!(
-                "M {:.2},{:.2} L {:.2},{:.2} ",
-                tick_start_x, y, tick_end_x, y
-            ));
-
-            // Draw value as text (fallback to basic SVG <text>)
-            svg_canvas.elements.push(format!(
-            r#"<text x="{:.2}" y="{:.2}" font-size="{:.2}" text-anchor="end" fill="black">{:.1}</text>"#,
-            margin - 5.0, y + font_size * 0.3, font_size, value
-        ));
+            svg_canvas.draw_text(
+                margin - font_size * 2.0,
+                y,
+                &format!("{:.1}", value),
+                font_size,
+                "black",
+            );
         }
-        svg_canvas.elements.push(format!(
-            r#"<path d="{}" stroke="black" stroke-width="1" fill="none"/>"#,
-            y_axis_ticks
-        ));
 
+        // Draw X-axis label
         svg_canvas.draw_text(
             width - margin,
             height - margin / 2.0,
@@ -131,43 +113,39 @@ impl Drawer for AreaChart {
             self.y_label
         ));
 
-        // Draw areas under the datasets
+        // Draw datasets as points or lines
         for dataset in &self.datasets {
-            let mut path_data = String::new();
-            let mut first_point = true;
+            for window in dataset.points.windows(2) {
+                if let [p1, p2] = window {
+                    let x1 = margin + (p1.0 - x_min) * scale_x;
+                    let y1 = height - margin - (p1.1 - y_min) * scale_y;
+                    let x2 = margin + (p2.0 - x_min) * scale_x;
+                    let y2 = height - margin - (p2.1 - y_min) * scale_y;
 
-            // Move to the initial point
+                    svg_canvas.draw_line(
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        &format!(
+                            "rgb({},{},{})",
+                            dataset.color[0], dataset.color[1], dataset.color[2]
+                        ),
+                        1.5,
+                    );
+                }
+            }
+
+            // Optionally draw points
             for &(x, y) in &dataset.points {
                 let svg_x = margin + (x - x_min) * scale_x;
                 let svg_y = height - margin - (y - y_min) * scale_y;
 
-                if first_point {
-                    path_data.push_str(&format!("M {:.2},{:.2} ", svg_x, origin_y));
-                    first_point = false;
-                }
-
-                path_data.push_str(&format!("L {:.2},{:.2} ", svg_x, svg_y));
+                svg_canvas.draw_circle(svg_x, svg_y, 3.0, "black");
             }
-
-            // Close the path back to the x-axis
-            if let Some(&(last_x, _)) = dataset.points.last() {
-                let svg_x = margin + (last_x - x_min) * scale_x;
-                path_data.push_str(&format!("L {:.2},{:.2} Z", svg_x, origin_y));
-            }
-
-            svg_canvas.elements.push(format!(
-                r#"<path d="{}" fill="rgba({}, {}, {}, 0.5)" stroke="rgb({}, {}, {})" stroke-width="1"/>"#,
-                path_data,
-                dataset.color[0],
-                dataset.color[1],
-                dataset.color[2],
-                dataset.color[0],
-                dataset.color[1],
-                dataset.color[2],
-            ));
         }
 
-        // Draw legend
+        // Draw legend in the bottom-left corner
         let legend_x_start = 5.0; // Start at the very left with margin spacing
         let legend_y = height - margin / 2.0; // Move to bottom-left corner
         let mut legend_x = legend_x_start; // Reset starting position for legend items
@@ -230,37 +208,45 @@ impl Drawer for AreaChart {
 
         // Draw the title
         let (w_title, h_title) = text_size(scale_title, &font, &self.title);
-        let title_x = (canvas.width).saturating_sub(w_title) / 2;
-        let title_y = (canvas.margin / 3).saturating_sub(h_title) as u32;
-        canvas.draw_text(title_x, title_y, &self.title, [0, 0, 0], &font, scale_title);
+        canvas.draw_text(
+            (canvas.width - w_title) / 2,
+            ((canvas.margin + h_title) / 2).max(0) as u32,
+            &self.title,
+            [0, 0, 0],
+            &font,
+            scale_title,
+        );
 
         // Calculate dataset limits
         let (x_min, x_max) = self
             .datasets
             .iter()
             .flat_map(|dataset| dataset.points.iter().map(|&(x, _)| x))
-            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), x| {
-                (min.min(x), max.max(x))
-            });
+            .fold((0.0_f64, 0.0_f64), |(min, max), x| (min.min(x), max.max(x)));
 
         let (y_min, y_max) = self
             .datasets
             .iter()
             .flat_map(|dataset| dataset.points.iter().map(|&(_, y)| y))
-            .fold((f64::INFINITY, f64::NEG_INFINITY), |(min, max), y| {
-                (min.min(y), max.max(y))
-            });
+            .fold((0.0_f64, 0.0_f64), |(min, max), y| (min.min(y), max.max(y)));
 
         // Adjust limits to include (0, 0)
         let x_min = x_min.min(0.0);
         let y_min = y_min.min(0.0);
-
         // Calculate scales
         let scale_x = (canvas.width - 2 * canvas.margin) as f64 / (x_max - x_min);
         let scale_y = (canvas.height - 2 * canvas.margin) as f64 / (y_max - y_min);
 
+        // Calculate scales based on dataset limits
+        // let scale_x = (canvas.width - 2 * canvas.margin) as f64 / (x_max - x_min);
+        // let scale_y = (canvas.height - 2 * canvas.margin) as f64 / (y_max - y_min);
+
         // Draw grids
-        canvas.draw_grid(20, [200, 200, 200]);
+        canvas.draw_grid(&[20, 20], [200, 200, 200]);
+        canvas.draw_vertical_line(canvas.margin, [0, 0, 0]);
+        canvas.draw_vertical_line(canvas.width - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.height - canvas.margin, [0, 0, 0]);
+        canvas.draw_horizontal_line(canvas.margin, [0, 0, 0]);
 
         // Draw axes
         // let origin_x = canvas.margin as i32;
@@ -332,16 +318,19 @@ impl Drawer for AreaChart {
             );
         }
 
-        // Draw areas under the curves
+        // Draw datasets
         for dataset in &self.datasets {
-            self.draw_area(canvas, dataset, origin_x, origin_y, scale_x, scale_y);
+            for window in dataset.points.windows(2) {
+                if let [p1, p2] = window {
+                    let x1 = origin_x + ((p1.0 - x_min) * scale_x) as i32;
+                    let y1 = origin_y - ((p1.1 - y_min) * scale_y) as i32;
+                    let x2 = origin_x + ((p2.0 - x_min) * scale_x) as i32;
+                    let y2 = origin_y - ((p2.1 - y_min) * scale_y) as i32;
+
+                    canvas.draw_line(x1, y1, x2, y2, dataset.color, dataset.line_type.clone());
+                }
+            }
         }
-
-        canvas.draw_vertical_line(canvas.margin, [0, 0, 0]);
-        canvas.draw_vertical_line(canvas.width - canvas.margin, [0, 0, 0]);
-        canvas.draw_horizontal_line(canvas.height - canvas.margin, [0, 0, 0]);
-        canvas.draw_horizontal_line(canvas.margin, [0, 0, 0]);
-
         // Draw legend
         self.draw_legend(canvas);
     }
