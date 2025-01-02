@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="DataViz Library"><title>dataviz - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="dataviz" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../dataviz/index.html">dataviz</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#dataviz-library" title="DataViz Library">DataViz Library</a><ul><li><a href="#features" title="Features">Features</a></li><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#datasets" title="Datasets">Datasets</a></li><li><a href="#drawers" title="Drawers">Drawers</a></li><li><a href="#utilities" title="Utilities">Utilities</a></li><li><a href="#configuration" title="Configuration">Configuration</a></li><li><a href="#canvas" title="Canvas">Canvas</a></li><li><a href="#display" title="Display">Display</a></li><li><a href="#getting-started" title="Getting Started">Getting Started</a></li><li><a href="#license" title="License">License</a></li></ul></li></ul><h3><a href="#modules-1">Crate Items</a></h3><ul class="block"><li><a href="#modules-1" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>dataviz</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/dataviz/lib.rs.html#1-145">source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="dataviz-library"><a class="doc-anchor" href="#dataviz-library">§</a>DataViz Library</h2>
+<p><strong>DataViz</strong> is a versatile and modular Rust library for creating and managing a wide variety of charts and graphs.
+Designed with flexibility and extensibility in mind, DataViz provides a powerful API for data visualization,
+supporting different chart types, customization options, and interactive features.</p>
+<h3 id="features"><a class="doc-anchor" href="#features">§</a>Features</h3>
+<ul>
+<li><strong>Comprehensive Chart Types</strong>: Support for bar charts, scatter graphs, pie charts, histograms, area charts, and Cartesian graphs.</li>
+<li><strong>Data Management</strong>: Modular datasets for structured and reusable data handling.</li>
+<li><strong>Customizable Renderers</strong>: Drawers for rendering charts on pixel-based or vector-based canvases.</li>
+<li><strong>Scalable Configuration</strong>: Centralized figure configuration for appearance settings, including fonts, colors, and grid styles.</li>
+<li><strong>Interactive Capabilities</strong>: Hover-based interactivity to enhance user experience with dynamic updates and tooltips.</li>
+</ul>
+<h3 id="modules"><a class="doc-anchor" href="#modules">§</a>Modules</h3>
+<p>DataViz is organized into a set of modules that define the core components of the library:</p>
+<h4 id="figure"><a class="doc-anchor" href="#figure">§</a><a href="figure/index.html" title="mod dataviz::figure"><code>figure</code></a></h4>
+<p>The main module that houses all types of charts and graphs. It includes:</p>
+<ul>
+<li><strong>Chart Types</strong>:
+<ul>
+<li><a href="figure/figuretypes/areachart/index.html" title="mod dataviz::figure::figuretypes::areachart"><code>areachart</code></a>: Create area charts for visualizing data trends.</li>
+<li><a href="figure/figuretypes/cartesiangraph/index.html" title="mod dataviz::figure::figuretypes::cartesiangraph"><code>cartesiangraph</code></a>: Cartesian graphs for mathematical and data plotting.</li>
+<li><a href="figure/figuretypes/groupbarchart/index.html" title="mod dataviz::figure::figuretypes::groupbarchart"><code>groupbarchart</code></a>: Grouped bar charts for comparative data visualization.</li>
+<li><a href="figure/figuretypes/histogram/index.html" title="mod dataviz::figure::figuretypes::histogram"><code>histogram</code></a>: Histograms for frequency distribution analysis.</li>
+<li><a href="figure/figuretypes/piechart/index.html" title="mod dataviz::figure::figuretypes::piechart"><code>piechart</code></a>: Pie charts for proportional data representation.</li>
+<li><a href="figure/figuretypes/quadrant1graph/index.html" title="mod dataviz::figure::figuretypes::quadrant1graph"><code>quadrant1graph</code></a>: Graphs restricted to the first quadrant.</li>
+<li><a href="figure/figuretypes/scattergraph/index.html" title="mod dataviz::figure::figuretypes::scattergraph"><code>scattergraph</code></a>: Scatter plots for individual data point visualization.</li>
+</ul>
+</li>
+</ul>
+<h3 id="datasets"><a class="doc-anchor" href="#datasets">§</a>Datasets</h3>
+<p>Defines reusable and modular datasets for different chart types, enabling structured data representation. Includes:</p>
+<ul>
+<li><a href="figure/datasets/areachartdataset/index.html" title="mod dataviz::figure::datasets::areachartdataset"><code>areachartdataset</code></a></li>
+<li><a href="figure/datasets/bardataset/index.html" title="mod dataviz::figure::datasets::bardataset"><code>bardataset</code></a></li>
+<li><a href="figure/datasets/cartesiangraphdataset/index.html" title="mod dataviz::figure::datasets::cartesiangraphdataset"><code>cartesiangraphdataset</code></a></li>
+<li><a href="figure/datasets/scattergraphdataset/index.html" title="mod dataviz::figure::datasets::scattergraphdataset"><code>scattergraphdataset</code></a></li>
+<li><a href="figure/datasets/dataset/index.html" title="mod dataviz::figure::datasets::dataset"><code>dataset</code></a>: Common dataset traits for unifying data operations.</li>
+</ul>
+<h3 id="drawers"><a class="doc-anchor" href="#drawers">§</a>Drawers</h3>
+<p>Provides customizable renderers for each chart type. Drawers allow charts to be rendered on various canvases,
+such as pixel-based or vector-based canvases. Includes:</p>
+<ul>
+<li><a href="figure/drawers/drawer/index.html" title="mod dataviz::figure::drawers::drawer"><code>drawer</code></a>: Core drawing functionality.</li>
+<li>Specialized drawers for specific chart types like:
+<ul>
+<li><a href="figure/drawers/drawerareachart/index.html" title="mod dataviz::figure::drawers::drawerareachart"><code>drawerareachart</code></a></li>
+<li><a href="figure/drawers/drawerbarchart/index.html" title="mod dataviz::figure::drawers::drawerbarchart"><code>drawerbarchart</code></a></li>
+<li><a href="figure/drawers/drawerpiechart/index.html" title="mod dataviz::figure::drawers::drawerpiechart"><code>drawerpiechart</code></a>, and more.</li>
+</ul>
+</li>
+</ul>
+<h3 id="utilities"><a class="doc-anchor" href="#utilities">§</a>Utilities</h3>
+<p>Utility modules for managing chart attributes and behaviors. Includes:</p>
+<ul>
+<li><a href="figure/utilities/axistype/index.html" title="mod dataviz::figure::utilities::axistype"><code>axistype</code></a>: Enum for axis types (X or Y).</li>
+<li><a href="figure/utilities/linetype/index.html" title="mod dataviz::figure::utilities::linetype"><code>linetype</code></a>: Styles for chart lines (solid, dashed, dotted).</li>
+<li><a href="figure/utilities/orientation/index.html" title="mod dataviz::figure::utilities::orientation"><code>orientation</code></a>: Orientation handling (horizontal or vertical).</li>
+<li><a href="figure/utilities/scatterdottype/index.html" title="mod dataviz::figure::utilities::scatterdottype"><code>scatterdottype</code></a>: Dot styles for scatter plots (circle, square, triangle, etc.).</li>
+</ul>
+<h3 id="configuration"><a class="doc-anchor" href="#configuration">§</a>Configuration</h3>
+<p>Centralized configuration for charts, providing a single source for appearance settings. Includes:</p>
+<ul>
+<li><a href="figure/configuration/figureconfig/index.html" title="mod dataviz::figure::configuration::figureconfig"><code>figureconfig</code></a>: Control colors, fonts, grid settings, and more.</li>
+</ul>
+<h3 id="canvas"><a class="doc-anchor" href="#canvas">§</a>Canvas</h3>
+<p>Abstractions for rendering surfaces, including:</p>
+<ul>
+<li><a href="figure/canvas/pixelcanvas/index.html" title="mod dataviz::figure::canvas::pixelcanvas"><code>pixelcanvas</code></a>: Raster-based rendering for charts.</li>
+<li><a href="figure/canvas/svgcanvas/index.html" title="mod dataviz::figure::canvas::svgcanvas"><code>svgcanvas</code></a>: Scalable vector graphics rendering for high-quality outputs.</li>
+</ul>
+<h3 id="display"><a class="doc-anchor" href="#display">§</a>Display</h3>
+<p>Modules for interactivity and display management. Includes:</p>
+<ul>
+<li>Hover functionality for charts like:
+<ul>
+<li><a href="figure/display/hovercartesian/index.html" title="mod dataviz::figure::display::hovercartesian"><code>hovercartesian</code></a></li>
+<li><a href="figure/display/hoverpiechart/index.html" title="mod dataviz::figure::display::hoverpiechart"><code>hoverpiechart</code></a>, and more.</li>
+</ul>
+</li>
+<li><a href="figure/display/winop/index.html" title="mod dataviz::figure::display::winop"><code>winop</code></a>: Manage window operations for interactive displays.</li>
+</ul>
+<h3 id="getting-started"><a class="doc-anchor" href="#getting-started">§</a>Getting Started</h3>
+<p>Here’s a quick example of creating and rendering a pie chart:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>dataviz::figure::figuretypes::piechart::PieChart;
+<span class="kw">use </span>dataviz::figure::configuration::figureconfig::FigureConfig;
+
+<span class="kw">let </span><span class="kw-2">mut </span>pie_chart = PieChart::new(<span class="string">"Market Share"</span>, FigureConfig::default());
+pie_chart.add_slice(<span class="string">"Product A"</span>, <span class="number">40.0</span>, [<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>]);
+pie_chart.add_slice(<span class="string">"Product B"</span>, <span class="number">30.0</span>, [<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>]);
+pie_chart.add_slice(<span class="string">"Product C"</span>, <span class="number">30.0</span>, [<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>]);
+
+<span class="comment">// Render the pie chart
+</span>pie_chart.draw();</code></pre></div>
+<h3 id="license"><a class="doc-anchor" href="#license">§</a>License</h3>
+<p>DataViz is open-source and licensed under the MIT license. Contributions are welcome!</p>
+</div></details><h2 id="modules-1" class="section-header">Modules<a href="#modules-1" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="figure/index.html" title="mod dataviz::figure">figure</a></div></li></ul></section></div></main></body></html>

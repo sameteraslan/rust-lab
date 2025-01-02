@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["areachart","cartesiangraph","groupbarchart","histogram","piechart","quadrant1graph","scattergraph"]};

@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A trait for plots that support hover functionality, allowing interactive features like highlighting and displaying information about data points."><title>Hover in dataviz::figure::display::hover - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="dataviz" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../../dataviz/index.html">dataviz</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Hover</a></h2><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.find_closest_point" title="find_closest_point">find_closest_point</a></li><li><a href="#tymethod.get_font" title="get_font">get_font</a></li><li><a href="#tymethod.handle_hover" title="handle_hover">handle_hover</a></li><li><a href="#tymethod.to_canvas_coordinates" title="to_canvas_coordinates">to_canvas_coordinates</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2><a href="index.html">In dataviz::<wbr>figure::<wbr>display::<wbr>hover</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../../../index.html">dataviz</a>::<wbr><a href="../../index.html">figure</a>::<wbr><a href="../index.html">display</a>::<wbr><a href="index.html">hover</a></span><h1>Trait <span class="trait">Hover</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../../src/dataviz/figure\display/hover.rs.html#6-65">source</a> </span></div><pre class="rust item-decl"><code>pub trait Hover {
+    // Required methods
+    fn <a href="#tymethod.find_closest_point" class="fn">find_closest_point</a>(
+        &amp;self,
+        mouse_x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        mouse_y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.83.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;((<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>), <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>)&gt;;
+<span class="item-spacer"></span>    fn <a href="#tymethod.to_canvas_coordinates" class="fn">to_canvas_coordinates</a>(
+        &amp;self,
+        x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>,
+        y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>,
+        canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    ) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>, <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>);
+<span class="item-spacer"></span>    fn <a href="#tymethod.get_font" class="fn">get_font</a>&lt;'a&gt;(&amp;self, font_data: &amp;'a [<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u8.html">u8</a>]) -&gt; FontRef&lt;'a&gt;;
+<span class="item-spacer"></span>    fn <a href="#tymethod.handle_hover" class="fn">handle_hover</a>(
+        &amp;self,
+        mouse_x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        mouse_y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    ) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.83.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.83.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>&gt;&gt;;
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A trait for plots that support hover functionality, allowing interactive
+features like highlighting and displaying information about data points.</p>
+</div></details><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.find_closest_point" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\display/hover.rs.html#21-26">source</a><h4 class="code-header">fn <a href="#tymethod.find_closest_point" class="fn">find_closest_point</a>(
+    &amp;self,
+    mouse_x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    mouse_y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.83.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;((<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>, <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>), <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>)&gt;</h4></section></summary><div class="docblock"><p>Finds the closest point to the mouse position on the plot.</p>
+<h5 id="parameters"><a class="doc-anchor" href="#parameters">§</a>Parameters</h5>
+<ul>
+<li><code>mouse_x</code>: The x-coordinate of the mouse position in canvas space.</li>
+<li><code>mouse_y</code>: The y-coordinate of the mouse position in canvas space.</li>
+<li><code>canvas</code>: The <code>PixelCanvas</code> being used for rendering the plot.</li>
+</ul>
+<h5 id="returns"><a class="doc-anchor" href="#returns">§</a>Returns</h5>
+<p>An optional tuple containing:</p>
+<ul>
+<li><code>((f64, f64), f64)</code>:
+<ul>
+<li>The <code>(x, y)</code> coordinates of the closest point.</li>
+<li>The distance from the mouse position to the point.</li>
+</ul>
+</li>
+</ul>
+<p>Returns <code>None</code> if no points are found.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.to_canvas_coordinates" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\display/hover.rs.html#37">source</a><h4 class="code-header">fn <a href="#tymethod.to_canvas_coordinates" class="fn">to_canvas_coordinates</a>(
+    &amp;self,
+    x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>,
+    y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.f64.html">f64</a>,
+    canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>, <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>)</h4></section></summary><div class="docblock"><p>Converts plot coordinates into canvas pixel coordinates.</p>
+<h5 id="parameters-1"><a class="doc-anchor" href="#parameters-1">§</a>Parameters</h5>
+<ul>
+<li><code>x</code>: The x-coordinate in the plot’s coordinate system.</li>
+<li><code>y</code>: The y-coordinate in the plot’s coordinate system.</li>
+<li><code>canvas</code>: The <code>PixelCanvas</code> being used for rendering the plot.</li>
+</ul>
+<h5 id="returns-1"><a class="doc-anchor" href="#returns-1">§</a>Returns</h5>
+<p>A tuple <code>(u32, u32)</code> representing the corresponding pixel coordinates on the canvas.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.get_font" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\display/hover.rs.html#49">source</a><h4 class="code-header">fn <a href="#tymethod.get_font" class="fn">get_font</a>&lt;'a&gt;(&amp;self, font_data: &amp;'a [<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u8.html">u8</a>]) -&gt; FontRef&lt;'a&gt;</h4></section></summary><div class="docblock"><p>Retrieves the font used for hover text rendering.</p>
+<h5 id="parameters-2"><a class="doc-anchor" href="#parameters-2">§</a>Parameters</h5>
+<ul>
+<li><code>font_data</code>: A slice containing the font data (e.g., bytes of a TTF file).</li>
+</ul>
+<h5 id="returns-2"><a class="doc-anchor" href="#returns-2">§</a>Returns</h5>
+<p>A <code>FontRef</code> representing the parsed font, tied to the lifetime of the <code>font_data</code>.</p>
+<h5 id="panics"><a class="doc-anchor" href="#panics">§</a>Panics</h5>
+<p>Panics if the font data cannot be parsed.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.handle_hover" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\display/hover.rs.html#64">source</a><h4 class="code-header">fn <a href="#tymethod.handle_hover" class="fn">handle_hover</a>(
+    &amp;self,
+    mouse_x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    mouse_y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    canvas: &amp;<a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.83.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.83.0/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>&gt;&gt;</h4></section></summary><div class="docblock"><p>Handles hover functionality and returns an updated buffer if applicable.</p>
+<p>This method is used to modify the canvas buffer in response to hover events,
+such as highlighting a data point or displaying additional information.</p>
+<h5 id="parameters-3"><a class="doc-anchor" href="#parameters-3">§</a>Parameters</h5>
+<ul>
+<li><code>mouse_x</code>: The x-coordinate of the mouse position in canvas space.</li>
+<li><code>mouse_y</code>: The y-coordinate of the mouse position in canvas space.</li>
+<li><code>canvas</code>: The <code>PixelCanvas</code> being used for rendering the plot.</li>
+</ul>
+<h5 id="returns-3"><a class="doc-anchor" href="#returns-3">§</a>Returns</h5>
+<p>An optional vector of <code>u32</code> representing the updated pixel buffer.
+If no changes are made, returns <code>None</code>.</p>
+</div></details></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-Hover-for-CartesianGraph" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\display/hovercartesian.rs.html#11-130">source</a><a href="#impl-Hover-for-CartesianGraph" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Hover.html" title="trait dataviz::figure::display::hover::Hover">Hover</a> for <a class="struct" href="../../figuretypes/cartesiangraph/struct.CartesianGraph.html" title="struct dataviz::figure::figuretypes::cartesiangraph::CartesianGraph">CartesianGraph</a></h3></section><section id="impl-Hover-for-GroupBarChart" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\display/hovergroupbarchart.rs.html#9-173">source</a><a href="#impl-Hover-for-GroupBarChart" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Hover.html" title="trait dataviz::figure::display::hover::Hover">Hover</a> for <a class="struct" href="../../figuretypes/groupbarchart/struct.GroupBarChart.html" title="struct dataviz::figure::figuretypes::groupbarchart::GroupBarChart">GroupBarChart</a></h3></section><section id="impl-Hover-for-Histogram" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\display/hoverhistogram.rs.html#9-153">source</a><a href="#impl-Hover-for-Histogram" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Hover.html" title="trait dataviz::figure::display::hover::Hover">Hover</a> for <a class="struct" href="../../figuretypes/histogram/struct.Histogram.html" title="struct dataviz::figure::figuretypes::histogram::Histogram">Histogram</a></h3></section><section id="impl-Hover-for-PieChart" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\display/hoverpiechart.rs.html#9-130">source</a><a href="#impl-Hover-for-PieChart" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Hover.html" title="trait dataviz::figure::display::hover::Hover">Hover</a> for <a class="struct" href="../../figuretypes/piechart/struct.PieChart.html" title="struct dataviz::figure::figuretypes::piechart::PieChart">PieChart</a></h3></section><section id="impl-Hover-for-ScatterGraph" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\display/hoverscatterchart.rs.html#9-173">source</a><a href="#impl-Hover-for-ScatterGraph" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Hover.html" title="trait dataviz::figure::display::hover::Hover">Hover</a> for <a class="struct" href="../../figuretypes/scattergraph/struct.ScatterGraph.html" title="struct dataviz::figure::figuretypes::scattergraph::ScatterGraph">ScatterGraph</a></h3></section></div><script src="../../../../trait.impl/dataviz/figure/display/hover/trait.Hover.js" async></script></section></div></main></body></html>

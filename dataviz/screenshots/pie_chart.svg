@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<rect x="0.00" y="0.00" width="800.00" height="600.00" fill="white" stroke="black" stroke-width="1.00" fill-opacity="1"/>
+<text x="400.00" y="40.00" font-size="24.00" text-anchor="middle" fill="black">Market Share</text>
+<g transform="translate(400.00,300.00)" stroke="black" stroke-width="1">
+<path d="M 0 0 L 220.00 0.00 A 220.00 220.00 0 0 1 -67.98 209.23 Z" fill="rgb(220,0,0)"/>
+<text x="77.59" y="106.79" font-size="12.00" fill="black" text-anchor="middle" alignment-baseline="middle">30.0%</text>
+<path d="M 0 0 L -67.98 209.23 A 220.00 220.00 0 0 1 -0.00 -220.00 Z" fill="rgb(0,220,0)"/>
+<text x="-130.37" y="-20.65" font-size="12.00" fill="black" text-anchor="middle" alignment-baseline="middle">45.0%</text>
+<path d="M 0 0 L -0.00 -220.00 A 220.00 220.00 0 0 1 220.00 -0.00 Z" fill="rgb(0,0,220)"/>
+<text x="93.34" y="-93.34" font-size="12.00" fill="black" text-anchor="middle" alignment-baseline="middle">25.0%</text>
+</g>
+<rect x="0.00" y="555.00" width="379.40" height="22.00" fill="white" stroke="black" stroke-width="0.50" fill-opacity="0.5"/>
+<rect x="5.00" y="560.00" width="12.00" height="12.00" fill="rgb(220,0,0)"/><text x="20.60" y="570.00" font-size="12.00" fill="black">Company A</text><rect x="129.80" y="560.00" width="12.00" height="12.00" fill="rgb(0,220,0)"/><text x="145.40" y="570.00" font-size="12.00" fill="black">Company B</text><rect x="254.60" y="560.00" width="12.00" height="12.00" fill="rgb(0,0,220)"/><text x="270.20" y="570.00" font-size="12.00" fill="black">Company C</text>
+</svg>

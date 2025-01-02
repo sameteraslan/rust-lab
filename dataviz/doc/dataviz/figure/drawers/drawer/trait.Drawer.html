@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A trait for rendering charts and graphs, supporting multiple output formats."><title>Drawer in dataviz::figure::drawers::drawer - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="dataviz" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../../dataviz/index.html">dataviz</a><span class="version">0.1.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Drawer</a></h2><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.draw" title="draw">draw</a></li><li><a href="#tymethod.draw_legend" title="draw_legend">draw_legend</a></li><li><a href="#tymethod.draw_svg" title="draw_svg">draw_svg</a></li></ul><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.draw_axis" title="draw_axis">draw_axis</a></li><li><a href="#method.draw_axis_value" title="draw_axis_value">draw_axis_value</a></li><li><a href="#method.draw_grid" title="draw_grid">draw_grid</a></li><li><a href="#method.draw_label" title="draw_label">draw_label</a></li><li><a href="#method.draw_title" title="draw_title">draw_title</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2><a href="index.html">In dataviz::<wbr>figure::<wbr>drawers::<wbr>drawer</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><span class="rustdoc-breadcrumbs"><a href="../../../index.html">dataviz</a>::<wbr><a href="../../index.html">figure</a>::<wbr><a href="../index.html">drawers</a>::<wbr><a href="index.html">drawer</a></span><h1>Trait <span class="trait">Drawer</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#11-169">source</a> </span></div><pre class="rust item-decl"><code>pub trait Drawer {
+    // Required methods
+    fn <a href="#tymethod.draw" class="fn">draw</a>(&amp;mut self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>);
+<span class="item-spacer"></span>    fn <a href="#tymethod.draw_legend" class="fn">draw_legend</a>(&amp;self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>);
+<span class="item-spacer"></span>    fn <a href="#tymethod.draw_svg" class="fn">draw_svg</a>(&amp;mut self, svg_canvas: &amp;mut <a class="struct" href="../../canvas/svgcanvas/struct.SvgCanvas.html" title="struct dataviz::figure::canvas::svgcanvas::SvgCanvas">SvgCanvas</a>);
+
+    // Provided methods
+    fn <a href="#method.draw_grid" class="fn">draw_grid</a>(&amp;self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>, config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.draw_axis" class="fn">draw_axis</a>(
+        &amp;self,
+        canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+        config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+        x1: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+        y1: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+        x2: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+        y2: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.draw_label" class="fn">draw_label</a>(
+        &amp;self,
+        canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+        config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+        x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.draw_title" class="fn">draw_title</a>(
+        &amp;self,
+        canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+        config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+        x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.draw_axis_value" class="fn">draw_axis_value</a>(
+        &amp;self,
+        canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+        config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+        x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+        text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+        axis: <a class="enum" href="../../utilities/axistype/enum.AxisType.html" title="enum dataviz::figure::utilities::axistype::AxisType">AxisType</a>,
+    ) { ... }
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A trait for rendering charts and graphs, supporting multiple output formats.</p>
+</div></details><h2 id="required-methods" class="section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.draw" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#16">source</a><h4 class="code-header">fn <a href="#tymethod.draw" class="fn">draw</a>(&amp;mut self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>)</h4></section></summary><div class="docblock"><p>Draws the main content of the plot on a <code>PixelCanvas</code>.</p>
+<h5 id="parameters"><a class="doc-anchor" href="#parameters">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the plot on.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.draw_legend" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#22">source</a><h4 class="code-header">fn <a href="#tymethod.draw_legend" class="fn">draw_legend</a>(&amp;self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>)</h4></section></summary><div class="docblock"><p>Draws the legend for the plot on a <code>PixelCanvas</code>.</p>
+<h5 id="parameters-1"><a class="doc-anchor" href="#parameters-1">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the legend on.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="tymethod.draw_svg" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#28">source</a><h4 class="code-header">fn <a href="#tymethod.draw_svg" class="fn">draw_svg</a>(&amp;mut self, svg_canvas: &amp;mut <a class="struct" href="../../canvas/svgcanvas/struct.SvgCanvas.html" title="struct dataviz::figure::canvas::svgcanvas::SvgCanvas">SvgCanvas</a>)</h4></section></summary><div class="docblock"><p>Draws the plot content on an <code>SvgCanvas</code>.</p>
+<h5 id="parameters-2"><a class="doc-anchor" href="#parameters-2">§</a>Parameters</h5>
+<ul>
+<li><code>svg_canvas</code>: The <code>SvgCanvas</code> to render the plot on.</li>
+</ul>
+</div></details></div><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.draw_grid" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#35-40">source</a><h4 class="code-header">fn <a href="#method.draw_grid" class="fn">draw_grid</a>(&amp;self, canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>, config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>)</h4></section></summary><div class="docblock"><p>Draws the grid for the plot based on the provided configuration.</p>
+<h5 id="parameters-3"><a class="doc-anchor" href="#parameters-3">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the grid on.</li>
+<li><code>config</code>: The <code>FigureConfig</code> containing grid appearance settings.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.draw_axis" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#49-59">source</a><h4 class="code-header">fn <a href="#method.draw_axis" class="fn">draw_axis</a>(
+    &amp;self,
+    canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+    x1: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+    y1: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+    x2: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+    y2: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.i32.html">i32</a>,
+)</h4></section></summary><div class="docblock"><p>Draws an axis line on the canvas.</p>
+<h5 id="parameters-4"><a class="doc-anchor" href="#parameters-4">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the axis on.</li>
+<li><code>config</code>: The <code>FigureConfig</code> containing axis appearance settings.</li>
+<li><code>x1</code>, <code>y1</code>: The starting coordinates of the axis.</li>
+<li><code>x2</code>, <code>y2</code>: The ending coordinates of the axis.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.draw_label" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#68-93">source</a><h4 class="code-header">fn <a href="#method.draw_label" class="fn">draw_label</a>(
+    &amp;self,
+    canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+    x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+)</h4></section></summary><div class="docblock"><p>Draws a text label on the canvas.</p>
+<h5 id="parameters-5"><a class="doc-anchor" href="#parameters-5">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the label on.</li>
+<li><code>config</code>: The <code>FigureConfig</code> containing label appearance settings.</li>
+<li><code>x</code>, <code>y</code>: The position to draw the label, centered on <code>(x, y)</code>.</li>
+<li><code>text</code>: The label text.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.draw_title" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#102-127">source</a><h4 class="code-header">fn <a href="#method.draw_title" class="fn">draw_title</a>(
+    &amp;self,
+    canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+    x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+)</h4></section></summary><div class="docblock"><p>Draws the plot title on the canvas.</p>
+<h5 id="parameters-6"><a class="doc-anchor" href="#parameters-6">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the title on.</li>
+<li><code>config</code>: The <code>FigureConfig</code> containing title appearance settings.</li>
+<li><code>x</code>, <code>y</code>: The position to draw the title, centered on <code>(x, y)</code>.</li>
+<li><code>text</code>: The title text.</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.draw_axis_value" class="method"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawer.rs.html#137-168">source</a><h4 class="code-header">fn <a href="#method.draw_axis_value" class="fn">draw_axis_value</a>(
+    &amp;self,
+    canvas: &amp;mut <a class="struct" href="../../canvas/pixelcanvas/struct.PixelCanvas.html" title="struct dataviz::figure::canvas::pixelcanvas::PixelCanvas">PixelCanvas</a>,
+    config: &amp;<a class="struct" href="../../configuration/figureconfig/struct.FigureConfig.html" title="struct dataviz::figure::configuration::figureconfig::FigureConfig">FigureConfig</a>,
+    x: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    y: <a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.u32.html">u32</a>,
+    text: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.83.0/std/primitive.str.html">str</a>,
+    axis: <a class="enum" href="../../utilities/axistype/enum.AxisType.html" title="enum dataviz::figure::utilities::axistype::AxisType">AxisType</a>,
+)</h4></section></summary><div class="docblock"><p>Draws a value on the axis (tick label) based on its type.</p>
+<h5 id="parameters-7"><a class="doc-anchor" href="#parameters-7">§</a>Parameters</h5>
+<ul>
+<li><code>canvas</code>: The <code>PixelCanvas</code> to draw the axis value on.</li>
+<li><code>config</code>: The <code>FigureConfig</code> containing axis value appearance settings.</li>
+<li><code>x</code>, <code>y</code>: The position to draw the value.</li>
+<li><code>text</code>: The text of the axis value.</li>
+<li><code>axis</code>: The type of axis (<code>AxisType::AxisX</code> or <code>AxisType::AxisY</code>).</li>
+</ul>
+</div></details></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-Drawer-for-AreaChart" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerareachart.rs.html#12-376">source</a><a href="#impl-Drawer-for-AreaChart" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/areachart/struct.AreaChart.html" title="struct dataviz::figure::figuretypes::areachart::AreaChart">AreaChart</a></h3></section><section id="impl-Drawer-for-CartesianGraph" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawercartesiangraph.rs.html#12-344">source</a><a href="#impl-Drawer-for-CartesianGraph" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/cartesiangraph/struct.CartesianGraph.html" title="struct dataviz::figure::figuretypes::cartesiangraph::CartesianGraph">CartesianGraph</a></h3></section><section id="impl-Drawer-for-GroupBarChart" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerbarchart.rs.html#11-357">source</a><a href="#impl-Drawer-for-GroupBarChart" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/groupbarchart/struct.GroupBarChart.html" title="struct dataviz::figure::figuretypes::groupbarchart::GroupBarChart">GroupBarChart</a></h3></section><section id="impl-Drawer-for-Histogram" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerhistogram.rs.html#9-250">source</a><a href="#impl-Drawer-for-Histogram" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/histogram/struct.Histogram.html" title="struct dataviz::figure::figuretypes::histogram::Histogram">Histogram</a></h3></section><section id="impl-Drawer-for-PieChart" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerpiechart.rs.html#11-212">source</a><a href="#impl-Drawer-for-PieChart" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/piechart/struct.PieChart.html" title="struct dataviz::figure::figuretypes::piechart::PieChart">PieChart</a></h3></section><section id="impl-Drawer-for-Quadrant1Graph" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerquadrant1graph.rs.html#12-357">source</a><a href="#impl-Drawer-for-Quadrant1Graph" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/quadrant1graph/struct.Quadrant1Graph.html" title="struct dataviz::figure::figuretypes::quadrant1graph::Quadrant1Graph">Quadrant1Graph</a></h3></section><section id="impl-Drawer-for-ScatterGraph" class="impl"><a class="src rightside" href="../../../../src/dataviz/figure\drawers/drawerscattergraph.rs.html#12-427">source</a><a href="#impl-Drawer-for-ScatterGraph" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.Drawer.html" title="trait dataviz::figure::drawers::drawer::Drawer">Drawer</a> for <a class="struct" href="../../figuretypes/scattergraph/struct.ScatterGraph.html" title="struct dataviz::figure::figuretypes::scattergraph::ScatterGraph">ScatterGraph</a></h3></section></div><script src="../../../../trait.impl/dataviz/figure/drawers/drawer/trait.Drawer.js" async></script></section></div></main></body></html>
