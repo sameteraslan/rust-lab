@@ -5,36 +5,57 @@ use crate::figure::drawer::Drawer;
 use crate::figure::piechart::PieChart;
 
 use super::areachart::AreaChart;
-use super::canvas::Canvas;
+use super::pixelcanvas::Canvas;
 use super::figureconfig::FigureConfig;
-use super::historgram::Histogram;
+use super::histogram::Histogram;
 use super::scattergraph::ScatterGraph;
 use super::svgcanvas::SvgCanvas;
 
+/// Represents the types of plots that can be created.
 pub enum PlotType {
+    /// A bar chart, which uses rectangular bars to represent data.
     BarChart,
+    /// A Cartesian graph, which plots points and lines on a coordinate grid.
     CartesianGraph,
+    /// A pie chart, which represents data as slices of a circle.
     PieChart,
+    /// A scatter graph, which plots individual data points.
     ScatterGraph,
+    /// An area chart, which represents data with filled areas under lines.
     AreaChart,
+    /// A histogram, which shows the frequency distribution of data.
     Histogram,
 }
 
+/// Represents the output format for the generated plots.
 pub enum OutputFormat {
+    /// Output as a `PixelCanvas`, which is a raster-based rendering format.
     PixelCanvas,
+    /// Output as an `Svg`, which is a scalable vector graphics format.
     Svg,
 }
 
+/// A factory for creating various types of plots.
+///
+/// This factory simplifies the creation of plot instances by abstracting the
+/// initialization process and providing default configurations.
 pub struct FigureFactory;
 
 impl FigureFactory {
-    pub fn create_canvas(format: OutputFormat, width: u32, height: u32) -> Box<dyn Drawer> {
-        match format {
-            OutputFormat::PixelCanvas => Box::new(Canvas::new(width, height, [255, 255, 255], 10)),
-            OutputFormat::Svg => Box::new(SvgCanvas::new(width, height, "white", 10)),
-        }
-    }
-
+    /// Creates a plot of the specified type with default settings.
+    ///
+    /// # Parameters
+    /// - `plot_type`: The type of plot to create (`PlotType`).
+    ///
+    /// # Returns
+    /// A boxed `Drawer` object representing the created plot.
+    ///
+    /// # Example
+    /// ```rust
+    /// use crate::figure::figurefactory::{FigureFactory, PlotType};
+    ///
+    /// let bar_chart = FigureFactory::create_plot(PlotType::BarChart);
+    /// ```
     pub fn create_plot(plot_type: PlotType) -> Box<dyn Drawer> {
         match plot_type {
             PlotType::BarChart => Box::new(BarChart::new(
@@ -50,10 +71,13 @@ impl FigureFactory {
                 "Y Axis",
                 &FigureConfig::default(),
             )),
-            PlotType::PieChart => Box::new(PieChart::new("Pie Chart")),
-            PlotType::ScatterGraph => {
-                Box::new(ScatterGraph::new("Scatter Graph", "X Axis", "Y Axis"))
-            }
+            PlotType::PieChart => Box::new(PieChart::new("Pie Chart", FigureConfig::default())),
+            PlotType::ScatterGraph => Box::new(ScatterGraph::new(
+                "Scatter Graph",
+                "X Axis",
+                "Y Axis",
+                FigureConfig::default(),
+            )),
             PlotType::AreaChart => Box::new(AreaChart::new(
                 "Area Chart",
                 "X Axis",
@@ -66,6 +90,7 @@ impl FigureFactory {
                 "Frequency",
                 0,
                 [0, 0, 255],
+                FigureConfig::default(),
             )),
         }
     }

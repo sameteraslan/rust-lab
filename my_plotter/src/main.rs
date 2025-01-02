@@ -1,30 +1,29 @@
-use my_plotter::dataset::Dataset;
-use my_plotter::drawer::Drawer;
-use my_plotter::figure;
-use my_plotter::figure::areachart::AreaChart;
-use my_plotter::figure::areachartdataset::AreaChartDataset;
-use my_plotter::figure::barchart::BarChart;
-use my_plotter::figure::bardataset::BarDataset;
-use my_plotter::figure::canvas::Canvas;
-use my_plotter::figure::cartesiangraph::CartesianGraph;
-use my_plotter::figure::cartesiangraphdataset::CartesianDataset;
-use my_plotter::figure::figureconfig::FigureConfig;
-use my_plotter::figure::linetype::LineType;
-use my_plotter::figure::orientation::Orientation;
-use my_plotter::figure::piechart::PieChart;
-use my_plotter::figure::scatterdottype::ScatterDotType;
-use my_plotter::historgram::Histogram;
-use my_plotter::quadrant1graph::Quadrant1Graph;
-use my_plotter::scattergraph::ScatterGraph;
-use my_plotter::scattergraphdataset::ScatterGraphDataset;
-use my_plotter::svgcanvas::SvgCanvas;
-use my_plotter::winop::Winop;
+use my_plotter::figure::canvas::pixelcanvas::PixelCanvas;
+use my_plotter::figure::canvas::svgcanvas::SvgCanvas;
+use my_plotter::figure::configuration::figureconfig::FigureConfig;
+use my_plotter::figure::datasets::areachartdataset::AreaChartDataset;
+use my_plotter::figure::datasets::bardataset::BarDataset;
+use my_plotter::figure::datasets::cartesiangraphdataset::CartesianDataset;
+use my_plotter::figure::datasets::dataset::Dataset;
+use my_plotter::figure::datasets::scattergraphdataset::ScatterGraphDataset;
+use my_plotter::figure::display::winop::Winop;
+use my_plotter::figure::drawers::drawer::Drawer;
+use my_plotter::figure::figuretypes::areachart::AreaChart;
+use my_plotter::figure::figuretypes::cartesiangraph::CartesianGraph;
+use my_plotter::figure::figuretypes::groupbarchart::GroupBarChart;
+use my_plotter::figure::figuretypes::histogram::Histogram;
+use my_plotter::figure::figuretypes::piechart::PieChart;
+use my_plotter::figure::figuretypes::quadrant1graph::Quadrant1Graph;
+use my_plotter::figure::figuretypes::scattergraph::ScatterGraph;
+use my_plotter::figure::utilities::linetype::LineType;
+use my_plotter::figure::utilities::orientation::Orientation;
+use my_plotter::figure::utilities::scatterdottype::ScatterDotType;
 use rand::Rng;
 use std::f64::consts::PI;
 use std::thread;
 
 fn main() {
-    // // Initialize the canvas
+    // Initialize the PixelCanvas
     let figure_config = FigureConfig {
         font_size_title: 20.0,
         font_size_label: 16.0,
@@ -42,8 +41,8 @@ fn main() {
         ..Default::default()
     };
 
-    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
-    let mut bar_chart = BarChart::new(
+    let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
+    let mut bar_chart = GroupBarChart::new(
         "Yearly Income",
         "Year",
         "Income",
@@ -76,11 +75,11 @@ fn main() {
     bar_chart.add_dataset(dataset3);
     bar_chart.add_dataset(dataset4);
 
-    bar_chart.draw(&mut canvas);
-    canvas.save_as_image("grouped_vertical_bar_chart.png");
+    bar_chart.draw(&mut pixel_canvas);
+    pixel_canvas.save_as_image("grouped_vertical_bar_chart.png");
 
-    // // Initialize the canvas
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // // Initialize the PixelCanvas
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut bar_chart = BarChart::new("Yearly Income", "Year", "Income", Orientation::Horizontal);
 
     // let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
@@ -108,62 +107,55 @@ fn main() {
     // bar_chart.add_dataset(dataset3);
     // bar_chart.add_dataset(dataset4);
 
-    // bar_chart.draw(&mut canvas);
-    // canvas.save_as_image("grouped_horizontal_bar_chart.png");
+    // bar_chart.draw(&mut pixel_canvas);
+    // pixel_canvas.save_as_image("grouped_horizontal_bar_chart.png");
 
-    // // Create a CartesianGraph
-    // let mut cartesian_graph = CartesianGraph::new("Math Functions", "X Axis", "Y Axis");
+    // Create a CartesianGraph
+    let mut cartesian_graph =
+        CartesianGraph::new("Math Functions", "X Axis", "Y Axis", &figure_config.clone());
 
-    // // Add datasets to CartesianGraph
-    // let mut sine_wave = CartesianDataset::new([0, 0, 255], "sin(x)", LineType::Dashed(10));
-    // let mut cosine_wave = CartesianDataset::new([255, 0, 0], "cos(x)", LineType::Solid);
+    // Add datasets to CartesianGraph
+    let mut sine_wave = CartesianDataset::new([0, 0, 255], "sin(x)", LineType::Dashed(10));
+    let mut cosine_wave = CartesianDataset::new([255, 0, 0], "cos(x)", LineType::Solid);
 
-    // // Add datasets
-    // let mut line1 = CartesianDataset::new([0, 0, 220], "line1", LineType::Solid);
-    // let mut line2 = CartesianDataset::new([220, 0, 0], "line2", LineType::Dashed(50));
-    // let mut line3 = CartesianDataset::new([0, 220, 0], "line3", LineType::Dotted(50));
-    // let mut line4 = CartesianDataset::new([150, 100, 50], "line4", LineType::Solid);
-    // let mut line5 = CartesianDataset::new([0, 0, 220], "line1", LineType::Solid);
-    // let mut line6 = CartesianDataset::new([220, 0, 0], "line2", LineType::Dashed(100));
-    // let mut line7 = CartesianDataset::new([0, 220, 0], "line3", LineType::Dotted(100));
-    // let mut line8 = CartesianDataset::new([150, 100, 50], "line4", LineType::Solid);
+    // Add datasets
+    let mut line5 = CartesianDataset::new([0, 0, 220], "line1", LineType::Solid);
+    let mut line6 = CartesianDataset::new([220, 0, 0], "line2", LineType::Dashed(100));
+    let mut line7 = CartesianDataset::new([0, 220, 0], "line3", LineType::Dotted(100));
+    let mut line8 = CartesianDataset::new([150, 100, 50], "line4", LineType::Solid);
 
-    // let num_points = 10;
-    // // let step = 4.0 * std::f64::consts::PI / num_points as f64;
-    // for x in 0..=num_points {
-    //     let xf = x as f64;
-    //     line1.add_point((xf, xf));
-    //     line2.add_point((xf, xf * 2.0));
-    //     line3.add_point((xf, xf * 3.0));
-    //     line4.add_point((xf, xf * 4.0));
-    //     line5.add_point((xf, xf));
-    //     line6.add_point((-xf, xf * 2.0));
-    //     line7.add_point((-2.0 * xf, -xf * 3.0));
-    //     line8.add_point((xf, xf * 4.0));
-    // }
+    let num_points = 10;
+    let step = 2.0 * PI / num_points as f64;
+    for x in 0..=num_points {
+        let xf = -PI + x as f64 * step;
+        line5.add_point((xf, xf));
+        line6.add_point((-xf, xf * 2.0));
+        line7.add_point((-2.0 * xf, -xf * 3.0));
+        line8.add_point((xf, xf * 4.0));
+    }
 
-    // let num_points = 1000;
-    // let step = 2.0 * PI / num_points as f64;
-    // for x in 0..=num_points {
-    //     let xf = -PI + x as f64 * step;
-    //     sine_wave.add_point((xf, xf.sin()));
-    //     cosine_wave.add_point((xf, xf.cos()));
-    // }
+    let num_points = 1000;
+    let step = 2.0 * PI / num_points as f64;
+    for x in 0..=num_points {
+        let xf = -PI + x as f64 * step;
+        sine_wave.add_point((xf, xf.sin()));
+        cosine_wave.add_point((xf, xf.cos()));
+    }
 
-    // cartesian_graph.add_dataset(sine_wave);
-    // cartesian_graph.add_dataset(cosine_wave);
-    // cartesian_graph.add_dataset(line5);
-    // cartesian_graph.add_dataset(line6);
-    // cartesian_graph.add_dataset(line7);
-    // cartesian_graph.add_dataset(line8);
+    cartesian_graph.add_dataset(sine_wave);
+    cartesian_graph.add_dataset(cosine_wave);
+    cartesian_graph.add_dataset(line5);
+    cartesian_graph.add_dataset(line6);
+    cartesian_graph.add_dataset(line7);
+    cartesian_graph.add_dataset(line8);
 
-    // // Draw CartesianGraph
-    // cartesian_graph.draw(&mut canvas);
-    // cartesian_graph.draw_legend(&mut canvas);
-    // canvas.save_as_image("cartesian_graph.png");
+    // Draw CartesianGraph
+    cartesian_graph.draw(&mut pixel_canvas);
+    cartesian_graph.draw_legend(&mut pixel_canvas);
+    pixel_canvas.save_as_image("cartesian_graph.png");
 
-    // // Initialize canvas
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // // Initialize PixelCanvas
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
 
     // // Create a Quadrant1Graph
     // let mut quadrant1_graph = Quadrant1Graph::new("Quadrant 1 Graph", "X Axis", "Y Axis");
@@ -174,22 +166,22 @@ fn main() {
     // quadrant1_graph.add_dataset(line4);
 
     // // Draw the Quadrant1Graph
-    // quadrant1_graph.draw(&mut canvas);
-    // canvas.save_as_image("quadrant1_graph.png");
+    // quadrant1_graph.draw(&mut pixel_canvas);
+    // pixel_canvas.save_as_image("quadrant1_graph.png");
 
     // // Pie Chart
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut pie_chart = PieChart::new("Market Share");
 
     // pie_chart.add_slice("Company A", 30.0, [220, 0, 0]);
     // pie_chart.add_slice("Company B", 45.0, [0, 220, 0]);
     // pie_chart.add_slice("Company C", 25.0, [0, 0, 220]);
 
-    // pie_chart.draw(&mut canvas);
-    // canvas.save_as_image("pie_chart.png");
+    // pie_chart.draw(&mut pixel_canvas);
+    // pixel_canvas.save_as_image("pie_chart.png");
 
     // // Scatter Graph
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut scatter_graph = ScatterGraph::new("Data Points", "X", "Y");
     // let mut rng = rand::thread_rng();
 
@@ -230,13 +222,18 @@ fn main() {
     // scatter_graph.add_dataset(dataset3);
     // scatter_graph.add_dataset(dataset4);
 
-    // scatter_graph.draw(&mut canvas);
-    // canvas.save_as_image("scatter_graph.png");
+    // scatter_graph.draw(&mut pixel_canvas);
+    // pixel_canvas.save_as_image("scatter_graph.png");
 
     // // Area Chart
 
-    let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
-    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis", figure_config.clone());
+    let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
+    let mut area_chart = AreaChart::new(
+        "Area Chart Example",
+        "X Axis",
+        "Y Axis",
+        figure_config.clone(),
+    );
 
     let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
     dataset1.add_point((0.0, 0.0));
@@ -260,35 +257,36 @@ fn main() {
     area_chart.add_dataset(dataset2);
     area_chart.add_dataset(dataset3);
 
-    area_chart.draw(&mut canvas);
-    canvas.save_as_image("area_chart.png");
+    area_chart.draw(&mut pixel_canvas);
+    pixel_canvas.save_as_image("area_chart.png");
 
     // // Histogram
 
-    // // Generate random data
-    // let mut rng = rand::thread_rng();
-    // let data: Vec<f64> = (0..1000).map(|_| rng.gen_range(-3.0..3.0)).collect();
+    // Generate random data
+    let mut rng = rand::thread_rng();
+    let data: Vec<f64> = (0..1000).map(|_| rng.gen_range(-3.0..3.0)).collect();
 
-    // // Create a Histogram
-    // let mut histogram = Histogram::new(
-    //     "Histogram Example",
-    //     "Values",
-    //     "Frequency",
-    //     30,
-    //     [135, 206, 250], // Skyblue
-    // );
-    // histogram.add_data_vec(data);
+    // Create a Histogram
+    let mut histogram = Histogram::new(
+        "Histogram Example",
+        "Values",
+        "Frequency",
+        30,
+        [135, 206, 250], // Skyblue
+        figure_config.clone(),
+    );
+    histogram.add_data_vec(data);
 
-    // // Draw the Histogram
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80); // White background
+    // Draw the Histogram
+    let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80); // White background
 
-    // histogram.draw(&mut canvas);
-    // canvas.save_as_image("histogram.png");
+    histogram.draw(&mut pixel_canvas);
+    pixel_canvas.save_as_image("histogram.png");
 
-    // // Winop::display_with_window(&mut canvas, "Histogram Example");
-    // Winop::display_interactive(&mut canvas, &mut histogram, "Interactive Histogram");
+    // // Winop::display_with_window(&mut pixel_canvas, "Histogram Example");
+    // Winop::display_interactive(&mut pixel_canvas, &mut histogram, "Interactive Histogram");
 
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut bar_chart = BarChart::new("Yearly Income", "Year", "Income", Orientation::Vertical);
 
     // let mut dataset1 = BarDataset::new("Company A", [220, 0, 0]);
@@ -316,8 +314,8 @@ fn main() {
     // bar_chart.add_dataset(dataset3);
     // bar_chart.add_dataset(dataset4);
 
-    // bar_chart.draw(&mut canvas);
-    // canvas.save_as_image("grouped_vertical_bar_chart.png");
+    // bar_chart.draw(&mut pixel_canvas);
+    // pixel_canvas.save_as_image("grouped_vertical_bar_chart.png");
 
     // let handle1 = thread::spawn(move || {
     //     let mut rng = rand::thread_rng();
@@ -332,7 +330,7 @@ fn main() {
 
     //     // Display the bar chart in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut bar_chart,
     //         "Real-Time Bar Chart",
     //         update_data,
@@ -340,7 +338,7 @@ fn main() {
     //     );
     // });
 
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut cartesian_graph = CartesianGraph::new("Real-Time Cartesian Graph", "X", "Y");
 
     // let sine_wave = CartesianDataset::new([0, 0, 255], "sin(x)", LineType::Solid);
@@ -360,7 +358,7 @@ fn main() {
 
     //     // Display the Cartesian graph in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut cartesian_graph,
     //         "Real-Time Cartesian Graph",
     //         update_data,
@@ -368,7 +366,7 @@ fn main() {
     //     );
     // });
 
-    // let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     // let mut pie_chart = PieChart::new("Real-Time Market Share");
 
     // pie_chart.add_slice("Company A", 33.0, [220, 0, 0]);
@@ -385,7 +383,7 @@ fn main() {
 
     //     // Display the pie chart in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut pie_chart,
     //         "Real-Time Pie Chart",
     //         update_data,
@@ -394,7 +392,7 @@ fn main() {
     // });
 
     // let handle4 = thread::spawn(move || {
-    //     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    //     let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     //     let mut scatter_graph = ScatterGraph::new("Real-Time Scatter Graph", "X", "Y");
 
     //     let dataset1 = ScatterGraphDataset::new([0, 220, 0], "Data1", ScatterDotType::Circle(5));
@@ -416,7 +414,7 @@ fn main() {
 
     //     // Display the scatter graph in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut scatter_graph,
     //         "Real-Time Scatter Graph",
     //         update_data,
@@ -440,17 +438,17 @@ fn main() {
     //     histogram.add_data_vec(data);
 
     //     // Draw the Histogram
-    //     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    //     let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     //     // White background
 
     //     let update_data = move |graph: &mut Histogram| {
     //         graph.add_data(rng.gen_range(-3.0..3.0));
     //     };
 
-    //     // Winop::display_with_window(&mut canvas, "Histogram Example");
+    //     // Winop::display_with_window(&mut pixel_canvas, "Histogram Example");
     //     // Display the histogram graph in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut histogram,
     //         "Real-Time Histogram Graph",
     //         update_data,
@@ -459,7 +457,7 @@ fn main() {
     // });
 
     // let handle6 = thread::spawn(move || {
-    //     let mut canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    //     let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     //     let mut bar_chart =
     //         BarChart::new("Yearly Income", "Year", "Income", Orientation::Horizontal);
 
@@ -488,8 +486,8 @@ fn main() {
     //     bar_chart.add_dataset(dataset3);
     //     bar_chart.add_dataset(dataset4);
 
-    //     bar_chart.draw(&mut canvas);
-    //     canvas.save_as_image("grouped_horizontal_bar_chart.png");
+    //     bar_chart.draw(&mut pixel_canvas);
+    //     pixel_canvas.save_as_image("grouped_horizontal_bar_chart.png");
 
     //     // let mut start_time = Instant::now();
     //     let mut rng = rand::thread_rng();
@@ -504,7 +502,7 @@ fn main() {
 
     //     // Display the bar chart in real-time
     //     Winop::display_real_time(
-    //         &mut canvas,
+    //         &mut PixelCanvas,
     //         &mut bar_chart,
     //         "Real-Time Bar Chart",
     //         update_data,
@@ -539,8 +537,8 @@ fn main() {
     graph.add_dataset(dataset2);
     graph.add_dataset(dataset3);
 
-    // Render as pixel canvas
-    let mut pixel_canvas = Canvas::new(800, 600, [255, 255, 255], 80);
+    // Render as pixel PixelCanvas
+    let mut pixel_canvas = PixelCanvas::new(800, 600, [255, 255, 255], 80);
     graph.draw(&mut pixel_canvas);
     pixel_canvas.save_as_image("output.png");
 
@@ -549,8 +547,13 @@ fn main() {
     graph.draw_svg(&mut svg_canvas);
     svg_canvas.save("output.svg").unwrap();
 
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut area_chart = AreaChart::new("Area Chart Example", "X Axis", "Y Axis", figure_config);
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
+    let mut area_chart = AreaChart::new(
+        "Area Chart Example",
+        "X Axis",
+        "Y Axis",
+        figure_config.clone(),
+    );
 
     let mut dataset1 = AreaChartDataset::new([220, 0, 0], "Dataset 1", 0.5);
     dataset1.add_point((0.0, 0.0));
@@ -574,8 +577,8 @@ fn main() {
     area_chart.add_dataset(dataset2);
     area_chart.add_dataset(dataset3);
 
-    area_chart.draw_svg(&mut canvas);
-    canvas.save("area_chart.svg").unwrap();
+    area_chart.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("area_chart.svg").unwrap();
 
     let mut line1 = CartesianDataset::new([0, 0, 220], "line1", LineType::Solid);
     let mut line2 = CartesianDataset::new([220, 0, 0], "line2", LineType::Dashed(50));
@@ -592,11 +595,16 @@ fn main() {
         line4.add_point((xf, xf * 4.0));
     }
 
-    // Initialize canvas
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
+    // Initialize PixelCanvas
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
 
     // Create a Quadrant1Graph
-    let mut quadrant1_graph = Quadrant1Graph::new("Quadrant 1 Graph", "X Axis", "Y Axis");
+    let mut quadrant1_graph = Quadrant1Graph::new(
+        "Quadrant 1 Graph",
+        "X Axis",
+        "Y Axis",
+        figure_config.clone(),
+    );
 
     quadrant1_graph.add_dataset(line1);
     quadrant1_graph.add_dataset(line2);
@@ -604,12 +612,12 @@ fn main() {
     quadrant1_graph.add_dataset(line4);
 
     // Draw the Quadrant1Graph
-    quadrant1_graph.draw_svg(&mut canvas);
-    canvas.save("quadrant1_graph.svg").unwrap();
+    quadrant1_graph.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("quadrant1_graph.svg").unwrap();
 
     // Scatter Graph
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut scatter_graph = ScatterGraph::new("Data Points", "X", "Y");
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
+    let mut scatter_graph = ScatterGraph::new("Data Points", "X", "Y", figure_config.clone());
     let mut rng = rand::thread_rng();
 
     let mut dataset1 =
@@ -649,8 +657,8 @@ fn main() {
     scatter_graph.add_dataset(dataset3);
     scatter_graph.add_dataset(dataset4);
 
-    scatter_graph.draw_svg(&mut canvas);
-    canvas.save("scatter_graph.svg").unwrap();
+    scatter_graph.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("scatter_graph.svg").unwrap();
 
     // Generate random data
     let mut rng = rand::thread_rng();
@@ -663,29 +671,30 @@ fn main() {
         "Frequency",
         30,
         [135, 206, 250], // Skyblue
+        figure_config.clone(),
     );
     histogram.add_data_vec(data);
 
     // Draw the Histogram
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80); // White background
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80); // White background
 
-    histogram.draw_svg(&mut canvas);
-    canvas.save("histogram.svg").unwrap();
+    histogram.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("histogram.svg").unwrap();
 
     // Pie Chart
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut pie_chart = PieChart::new("Market Share");
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
+    let mut pie_chart = PieChart::new("Market Share", figure_config.clone());
 
     pie_chart.add_slice("Company A", 30.0, [220, 0, 0]);
     pie_chart.add_slice("Company B", 45.0, [0, 220, 0]);
     pie_chart.add_slice("Company C", 25.0, [0, 0, 220]);
 
-    pie_chart.draw_svg(&mut canvas);
-    canvas.save("pie_chart.svg").unwrap();
+    pie_chart.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("pie_chart.svg").unwrap();
 
-    // Initialize the canvas
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut bar_chart = BarChart::new(
+    // Initialize the PixelCanvas
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
+    let mut bar_chart = GroupBarChart::new(
         "Yearly Income",
         "Year",
         "Income",
@@ -718,10 +727,10 @@ fn main() {
     bar_chart.add_dataset(dataset3);
     bar_chart.add_dataset(dataset4);
 
-    bar_chart.draw_svg(&mut canvas);
-    canvas.save("grouped_vertical_bar_chart.svg").unwrap();
+    bar_chart.draw_svg(&mut pixel_canvas);
+    pixel_canvas.save("grouped_vertical_bar_chart.svg").unwrap();
 
-    // Initialize the canvas
+    // Initialize the PixelCanvas
     let figure_config = FigureConfig {
         font_size_title: 20.0,
         font_size_label: 16.0,
@@ -738,8 +747,8 @@ fn main() {
             .to_string(),
         ..Default::default()
     };
-    let mut canvas = SvgCanvas::new(800, 600, "white", 80);
-    let mut bar_chart = BarChart::new(
+    let mut pixel_canvas = SvgCanvas::new(800, 600, "white", 80);
+    let mut bar_chart = GroupBarChart::new(
         "Yearly Income",
         "Year",
         "Income",
@@ -772,9 +781,11 @@ fn main() {
     bar_chart.add_dataset(dataset3);
     bar_chart.add_dataset(dataset4);
 
-    bar_chart.draw_svg(&mut canvas);
-    canvas.save("grouped_horizontal_bar_chart.svg").unwrap();
+    bar_chart.draw_svg(&mut pixel_canvas);
+    pixel_canvas
+        .save("grouped_horizontal_bar_chart.svg")
+        .unwrap();
 
-    let svg_text = canvas.get_svg_as_text();
+    let svg_text = pixel_canvas.get_svg_as_text();
     Winop::display_svg(&svg_text, "Bar Chart Example");
 }
