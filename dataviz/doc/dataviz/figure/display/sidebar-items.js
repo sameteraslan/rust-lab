@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["hover","hovercartesian","hovergroupbarchart","hoverhistogram","hoverpiechart","hoverscatterchart","winop"]};

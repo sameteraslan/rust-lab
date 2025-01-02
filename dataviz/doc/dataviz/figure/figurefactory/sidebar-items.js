@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FigureType","OutputFormat"],"struct":["FigureFactory"]};

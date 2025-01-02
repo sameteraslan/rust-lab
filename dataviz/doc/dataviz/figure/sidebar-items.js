@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["canvas","configuration","datasets","display","drawers","figurefactory","figuretypes","utilities"]};
